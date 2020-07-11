@@ -1,0 +1,16 @@
+server.port: 8761
+
+spring:
+  application.name: config-server
+  cloud.config:
+    server.git:
+      uri: https://github.com/organization-heroes/MC-BKEND-CONFIG.git
+      default-label: master
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8760/eureka/
+    registryFetchIntervalSeconds: 1
+  instance:
+    leaseRenewalIntervalInSeconds: 1

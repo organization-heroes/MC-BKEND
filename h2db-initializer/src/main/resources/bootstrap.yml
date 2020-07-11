@@ -1,5 +1,26 @@
-spring:
-  application.name: h2db-service
 logging:
   level:
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    
+# Enabling H2 DB from cofiguration server
+server.port: 8762
+
+spring:
+  application.name: h2db-initializer
+  cloud.config:
+    discovery:
+      enabled: true
+      serviceId: config-server
+    fail-fast: true
+    retry:
+      initialInterval: 2000
+      maxAttempts: 30
+  mvc.servlet.load-on-startup: 1
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8760/eureka/
+    registryFetchIntervalSeconds: 1
+  instance:
+    leaseRenewalIntervalInSeconds: 1

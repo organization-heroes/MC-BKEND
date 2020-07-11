@@ -1,4 +1,9 @@
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+
 spring:
+  application.name: h2db-service
   datasource:
     driverClassName: org.h2.Driver
     username: sa
@@ -19,4 +24,4 @@ spring:
 
 # Enabling H2 Console URL
 
-server.port: 8761
+server.port: 8762
