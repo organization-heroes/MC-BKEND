@@ -1,0 +1,5 @@
+spring:
+  application.name: h2db-service
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG

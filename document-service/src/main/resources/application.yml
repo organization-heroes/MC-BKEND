@@ -1,0 +1,6 @@
+spring:
+  datasource.url: jdbc:h2:tcp://localhost:9091/file:C:/data/dm_db
+
+server:
+  port: 8762
+  servlet.context-path: /document-service

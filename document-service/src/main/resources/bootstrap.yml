@@ -1,0 +1,6 @@
+spring:
+  application.name: document-service
+
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG

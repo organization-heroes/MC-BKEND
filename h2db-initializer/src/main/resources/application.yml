@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+      poolName: HikariPoolZZZ
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate.ddl-auto: update
+    show-sql: true
+    properties.format_sql: true
+    properties.hibernate.generate_statistics: false
+    url: jdbc:h2:file:C:/data/dm_db;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
+  h2:
+    console.path: /h2
+
+# Enabling H2 Console URL
+
+server.port: 8761

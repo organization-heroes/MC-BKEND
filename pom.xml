@@ -33,6 +33,7 @@
 	</dependencyManagement>
 
 	<modules>
+		<module>h2db-initializer</module>
 		<module>user-service</module>
 		<module>document-service</module>
 	</modules>
