@@ -6,7 +6,7 @@ create table IF NOT EXISTS document (
 	doc_title varchar(100),
 	doc_desc varchar(100),
 	doc_location varchar(100),
-	is_apprvd varchar(15),
+	apprvl_status varchar(15),
 	user_id bigint not null,
 	primary key (id)
 );
