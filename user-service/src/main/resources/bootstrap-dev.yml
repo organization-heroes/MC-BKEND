@@ -1,19 +1,10 @@
+spring:
+  application.name: user-service
+  datasource.url: jdbc:h2:tcp://localhost:9091/file:C:/data/dm_db
 logging:
   level:
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
     
-spring:
-  application.name: user-service
-  cloud.config:
-    discovery:
-      enabled: true
-      serviceId: config-server
-    fail-fast: true
-    retry:
-      initialInterval: 2000
-      maxAttempts: 30
-  mvc.servlet.load-on-startup: 1
-
 eureka:
   client:
     serviceUrl:
@@ -21,6 +12,7 @@ eureka:
     registryFetchIntervalSeconds: 1
   instance:
     leaseRenewalIntervalInSeconds: 1
+
     
 server:
   port: 8763

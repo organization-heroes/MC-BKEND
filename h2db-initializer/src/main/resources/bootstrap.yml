@@ -2,9 +2,6 @@ logging:
   level:
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
     
-# Enabling H2 DB from cofiguration server
-server.port: 8762
-
 spring:
   application.name: h2db-initializer
   cloud.config:
@@ -24,3 +21,6 @@ eureka:
     registryFetchIntervalSeconds: 1
   instance:
     leaseRenewalIntervalInSeconds: 1
+    
+# Enabling H2 DB from cofiguration server
+server.port: 8762
