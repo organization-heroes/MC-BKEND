@@ -6,14 +6,6 @@ logging:
   level:
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8760/eureka/
-    registryFetchIntervalSeconds: 1
-  instance:
-    leaseRenewalIntervalInSeconds: 1
-
 server:
   port: 8764
   servlet.context-path: /document-service

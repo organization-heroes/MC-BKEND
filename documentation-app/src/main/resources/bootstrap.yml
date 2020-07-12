@@ -1,0 +1,43 @@
+server:
+  port: 8800
+  
+info:
+  component: Edge Server
+  
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+    
+zuul:
+  prefix: /api
+  routes:
+    documents: 
+      path: /document-service/**
+      serviceId: document-service
+    users: 
+      path: /user-service/**
+      serviceId: user-service
+   
+ribbon:
+  eureka:
+    enabled: true
+ 
+eureka:
+  instance:
+    appname: documentation-app
+    leaseRenewalIntervalInSeconds: 1
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    enabled: true
+    registerWithEureka: false
+    service-url:
+      defaultZone: http://localhost:8760/eureka/
+    registryFetchIntervalSeconds: 1
+      
+swagger: 
+  config: 
+    refreshrate: 5000
+    
+swagger.enabled: true

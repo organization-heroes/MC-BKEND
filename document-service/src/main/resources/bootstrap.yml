@@ -21,7 +21,9 @@ eureka:
     registryFetchIntervalSeconds: 1
   instance:
     leaseRenewalIntervalInSeconds: 1
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
 
 server:
   port: 8764
-  servlet.context-path: /document-service
+
+swagger.enabled: true

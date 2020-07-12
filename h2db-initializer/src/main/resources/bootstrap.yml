@@ -21,6 +21,7 @@ eureka:
     registryFetchIntervalSeconds: 1
   instance:
     leaseRenewalIntervalInSeconds: 1
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
     
 # Enabling H2 DB from cofiguration server
 server.port: 8762
