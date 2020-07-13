@@ -1,3 +1,4 @@
+drop table if exists document;
 create table IF NOT EXISTS document (
 
 	id bigint not null,

@@ -40,7 +40,6 @@ public class SwaggerDocumentationConfiguration implements SwaggerResourcesProvid
 				.paths(PathSelectors.any()).build().pathMapping("/");
 	}
 
-	//设置api信息
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
 				.title("Organization heros zuul gateway")

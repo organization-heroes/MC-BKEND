@@ -19,6 +19,8 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8760/eureka/
     registryFetchIntervalSeconds: 1
+    registerWithEureka: true
+    fetchRegistry: true
   instance:
     leaseRenewalIntervalInSeconds: 1
     instance-id: ${spring.cloud.client.ip-address}:${server.port}

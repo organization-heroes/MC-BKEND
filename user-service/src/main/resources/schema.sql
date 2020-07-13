@@ -1,3 +1,4 @@
+drop table if exists user;
 create table IF NOT EXISTS user (
 
 	id bigint not null,
