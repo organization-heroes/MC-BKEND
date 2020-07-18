@@ -27,13 +27,13 @@ zuul:
     loan-service-api: 
       path: /loan-service/**
       serviceId: loan-service
-    document-services: 
+    document-service: 
       path: /auth/document-service/**
       serviceId: document-service
-    user-services: 
+    user-service: 
       path: /auth/user-service/**
       serviceId: user-service
-    loan-services: 
+    loan-service: 
       path: /auth/loan-service/**
       serviceId: loan-service
    
