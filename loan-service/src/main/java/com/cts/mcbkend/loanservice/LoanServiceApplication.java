@@ -10,13 +10,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableDiscoveryClient
 @ComponentScan({
-    "com.cts.mcbkend.documentservice",
+    "com.cts.mcbkend.loanservice",
     })
 @EnableJpaRepositories(basePackages = {
-    "com.cts.mcbkend.documentservice.repository"     
+    "com.cts.mcbkend.loanservice.repository"     
    })
 @EntityScan(basePackages= {
-    "com.cts.mcbkend.documentservice.entity"
+    "com.cts.mcbkend.loanservice.entity"
     })
 public class LoanServiceApplication {
 

@@ -13,12 +13,29 @@ endpoints:
 zuul:
   prefix: /api
   routes:
+    auth-center:
+      path: /login/**
+      url: http://127.0.0.1:8081/
+      sensitiveHeaders: Cookie,Set-Cookie
+      stripPrefix: false
     document-service-api: 
       path: /document-service/**
       serviceId: document-service
     user-service-api: 
       path: /user-service/**
       serviceId: user-service
+    loan-service-api: 
+      path: /loan-service/**
+      serviceId: loan-service
+    document-services: 
+      path: /auth/document-service/**
+      serviceId: document-service
+    user-services: 
+      path: /auth/user-service/**
+      serviceId: user-service
+    loan-services: 
+      path: /auth/loan-service/**
+      serviceId: loan-service
    
 ribbon:
   eureka:
@@ -41,3 +58,4 @@ swagger:
     refreshrate: 5000
     
 swagger.enabled: true
+sukanta.security.jwt.secret: topsecret

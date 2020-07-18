@@ -7,7 +7,7 @@
 		<artifactId>MC-BKEND</artifactId>
 		<version>1.1</version>
 	</parent>
-	<artifactId>laon-service</artifactId>
+	<artifactId>loan-service</artifactId>
 
 	<dependencies>
 		<dependency>

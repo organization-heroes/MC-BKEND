@@ -73,7 +73,7 @@ public class LoanServiceImpl implements LoanService {
 				loanEntityObj.setLoanDesc(loanDto.getLoanDesc());
 				loanEntityObj.setLoanStatus(loanDto.getLoanStatus());
 				loanEntityObj.setLoanType(loanDto.getLoanType());
-				loanEntityObj.setLockId(Constants.DEFAULT_LOCK_ID);
+				loanEntityObj.setLockId(loanDto.getLockId());
 				loanEntityObj.setVersion(loanDto.getVersion());
 				loanEntityObj.setUserId(loanDto.getUserId());
 				registerLoanEntity = loanRepository.saveAndFlush(loanEntityObj);

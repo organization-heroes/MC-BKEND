@@ -17,11 +17,11 @@
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Hoxton.SR6</spring-cloud.version>
 		<springfox.swagger.version>2.9.2</springfox.swagger.version>
-		<spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
-		<oauth.version>2.2.1.RELEASE</oauth.version>
-        <jwt.version>1.0.9.RELEASE</jwt.version>
+		<jsonwebtoken.version>0.7.0</jsonwebtoken.version>
         <commons-io.version>2.6</commons-io.version>
         <modelmapper.version>2.3.5</modelmapper.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -32,6 +32,7 @@
 		<module>h2db-initializer</module>
 		<module>user-service</module>
 		<module>document-service</module>
+		<module>common</module>
 		<module>documentation-app</module>
 	</modules>
 	
