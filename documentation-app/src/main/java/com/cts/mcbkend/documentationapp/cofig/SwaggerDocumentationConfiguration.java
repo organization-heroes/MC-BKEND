@@ -1,7 +1,10 @@
 package com.cts.mcbkend.documentationapp.cofig;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,10 +38,16 @@ public class SwaggerDocumentationConfiguration implements SwaggerResourcesProvid
 	@Bean
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
+				.produces(DEFAULT_PRODUCES_AND_CONSUMES)
+		        .consumes(DEFAULT_PRODUCES_AND_CONSUMES)
 				.enable(swaggerEnabled).select()
 				.apis(RequestHandlerSelectors.basePackage("com.cts.mcbkend.documentationapp"))
 				.paths(PathSelectors.any()).build().pathMapping("/");
 	}
+	
+	private static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES = 
+		      new HashSet<String>(Arrays.asList("application/json",
+		          "application/xml"));
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()

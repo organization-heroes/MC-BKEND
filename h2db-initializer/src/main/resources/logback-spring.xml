@@ -12,7 +12,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>logs/h2dbservice.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>h2db.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>logs/h2db.%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>10</maxHistory>
 			<totalSizeCap>1GB</totalSizeCap>
 		</rollingPolicy>
@@ -20,28 +20,13 @@
 			<pattern>%d{HH:mm:ss.SSS} %-5level %msg%n</pattern>
 		</encoder>
 	</appender>
-	<appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-		<destination>192.168.99.100:5000</destination>
-		<encoder
-			class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-			<providers>
-				<mdc />
-				<context />
-				<logLevel />
-				<loggerName />
-				<pattern>
-					<pattern>
-						{
-						"appName": "h2db-service"
-						}
-					</pattern>
-				</pattern>
-				<threadName />
-				<message />
-				<logstashMarkers />
-				<stackTrace />
-			</providers>
-		</encoder>
+	<appender name="STASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	    <file>logs/h2db_stash.log</file>
+	    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	        <fileNamePattern>logs/h2db_stash.%d{yyyy-MM-dd}.log</fileNamePattern>
+	        <maxHistory>7</maxHistory>
+	    </rollingPolicy>  
+	    <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
 	</appender>
 	<root level="INFO">
 		<appender-ref ref="CONSOLE" />

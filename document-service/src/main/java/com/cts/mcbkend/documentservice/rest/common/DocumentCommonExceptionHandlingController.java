@@ -37,10 +37,10 @@ public class DocumentCommonExceptionHandlingController {
 		LOGGER.error("Exception - " + stackTrace);
 		DocumentRestException documentException = (DocumentRestException) ex;
 		ErrorResponse error = new ErrorResponse();
-		error.setErrorCode(HttpStatus.PRECONDITION_FAILED.value());
+		error.setErrorCode(documentException.getErrorCode().value());
 		error.setErrorMessage(documentException.getErrorMessage());
 		LOGGER.info(documentException.getErrorMessage());
-		return new ResponseEntity<ResponseEvent>(ResponseEvent.errors(error), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<ResponseEvent>(ResponseEvent.errors(error), documentException.getErrorCode());
 	}
 
 	

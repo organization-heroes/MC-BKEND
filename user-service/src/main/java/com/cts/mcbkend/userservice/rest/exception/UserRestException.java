@@ -1,5 +1,7 @@
 package com.cts.mcbkend.userservice.rest.exception;
 
+import org.springframework.http.HttpStatus;
+
 /**
  * 
  * @author Sukanta
@@ -10,7 +12,7 @@ public class UserRestException extends Exception {
 	
 	private static final long serialVersionUID = 4689640754895923304L;
 	private String errorMessage;
-	private String errorCode;
+	private HttpStatus errorCode;
 
 	public String getErrorMessage() {
 		return errorMessage;
@@ -20,11 +22,11 @@ public class UserRestException extends Exception {
 		this.errorMessage = errorMessage;
 	}
 
-	public String getErrorCode() {
+	public HttpStatus getErrorCode() {
 		return errorCode;
 	}
 
-	public void setErrorCode(String errorCode) {
+	public void setErrorCode(HttpStatus errorCode) {
 		this.errorCode = errorCode;
 	}
 

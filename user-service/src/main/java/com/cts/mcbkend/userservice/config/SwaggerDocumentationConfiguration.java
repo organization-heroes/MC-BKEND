@@ -2,6 +2,10 @@ package com.cts.mcbkend.userservice.config;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +30,15 @@ public class SwaggerDocumentationConfiguration {
 	@Value(value = "${swagger.enabled}")
 	Boolean swaggerEnabled;
 
+	private static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES = 
+		      new HashSet<String>(Arrays.asList("application/json",
+		          "application/xml"));
+		
 	@Bean
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
+				.produces(DEFAULT_PRODUCES_AND_CONSUMES)
+		        .consumes(DEFAULT_PRODUCES_AND_CONSUMES)
 				.enable(swaggerEnabled).select()
 				.apis(RequestHandlerSelectors.basePackage("com.cts.mcbkend.userservice"))
 				.paths(PathSelectors.any()).build().pathMapping("/");
@@ -37,6 +47,8 @@ public class SwaggerDocumentationConfiguration {
 	@Bean
 	public Docket swaggerUserApi10() {
 	    return new Docket(DocumentationType.SWAGGER_2)
+    		.produces(DEFAULT_PRODUCES_AND_CONSUMES)
+	        .consumes(DEFAULT_PRODUCES_AND_CONSUMES)
 	        .groupName("user-api-1.0")
 	        .select()
 	            .apis(RequestHandlerSelectors.basePackage("com.cts.mcbkend.userservice"))
@@ -47,6 +59,8 @@ public class SwaggerDocumentationConfiguration {
 	@Bean
 	public Docket swaggerUserApi11() {
 	    return new Docket(DocumentationType.SWAGGER_2)
+    		.produces(DEFAULT_PRODUCES_AND_CONSUMES)
+	        .consumes(DEFAULT_PRODUCES_AND_CONSUMES)
 	        .groupName("user-api-1.1")
 	        .select()
 	            .apis(RequestHandlerSelectors.basePackage("com.cts.mcbkend.userservice"))
@@ -57,6 +71,8 @@ public class SwaggerDocumentationConfiguration {
 	@Bean
 	public Docket swaggerUserApi12() {
 	    return new Docket(DocumentationType.SWAGGER_2)
+    		.produces(DEFAULT_PRODUCES_AND_CONSUMES)
+	        .consumes(DEFAULT_PRODUCES_AND_CONSUMES)
 	        .groupName("user-api-1.2")
 	        .select()
 	            .apis(RequestHandlerSelectors.basePackage("com.cts.mcbkend.userservice"))
@@ -73,6 +89,5 @@ public class SwaggerDocumentationConfiguration {
 				.version("1.0.0")
 				.build();
 	}
-
 
 }
