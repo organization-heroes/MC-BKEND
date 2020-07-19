@@ -1,19 +1,9 @@
-server:
-  port: 8087
-  
-spring.application.name: turbine-dashboard
-  
 spring:
-  application.name: turbine-initializer
+  application.name: turbine-dashboard
   cloud.config:
     discovery:
       enabled: true
       serviceId: config-server
-    fail-fast: true
-    retry:
-      initialInterval: 2000
-      maxAttempts: 30
-  mvc.servlet.load-on-startup: 1
 
 eureka:
   client:
@@ -23,3 +13,6 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 1
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
+
+server:
+  port: 8087
