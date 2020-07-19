@@ -1,7 +1,5 @@
 package com.cts.mcbkend.common;
 
-import lombok.Getter;
-import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -10,8 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
  *
  * @author sukanta 2017/10/18
  */
-@Getter
-@ToString
 public class JwtAuthenticationConfig {
 
     @Value("${sukanta.security.jwt.url:/login}")
@@ -28,4 +24,52 @@ public class JwtAuthenticationConfig {
 
     @Value("${sukanta.security.jwt.secret}")
     private String secret;
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getHeader() {
+		return header;
+	}
+
+	public void setHeader(String header) {
+		this.header = header;
+	}
+
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+	public int getExpiration() {
+		return expiration;
+	}
+
+	public void setExpiration(int expiration) {
+		this.expiration = expiration;
+	}
+
+	public String getSecret() {
+		return secret;
+	}
+
+	public void setSecret(String secret) {
+		this.secret = secret;
+	}
+
+	@Override
+	public String toString() {
+		return "JwtAuthenticationConfig [url=" + url + ", header=" + header + ", prefix=" + prefix + ", expiration="
+				+ expiration + ", secret=" + secret + "]";
+	}
+	
+	
 }

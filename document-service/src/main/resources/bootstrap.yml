@@ -29,3 +29,5 @@ server:
   port: 8764
 
 swagger.enabled: true
+
+custom.instance.id: document-instance1

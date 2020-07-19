@@ -29,3 +29,5 @@ server:
   port: 8765
 
 swagger.enabled: true
+
+custom.instance.id: loan-instance1

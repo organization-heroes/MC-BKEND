@@ -1,10 +1,10 @@
 package com.cts.mcbkend.userservice.rest.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ctc.wstx.util.StringUtil;
 import com.cts.mcbkend.userservice.model.UserDto;
 import com.cts.mcbkend.userservice.rest.common.UserCommonExceptionHandlingController;
 import com.cts.mcbkend.userservice.rest.event.ResponseEvent;
@@ -29,6 +28,9 @@ public class UserController extends UserCommonExceptionHandlingController{
 	
 	@Autowired
 	private UserService userService;
+	
+	@Value(value = "${custom.instance.id}")
+	private String customInstanceId;
 
 	/**
 	 * 
@@ -37,7 +39,7 @@ public class UserController extends UserCommonExceptionHandlingController{
 	 */
 	@RequestMapping(value={"/v1.0/get-user/userName/{userName}", "/v1.1/get-user/userName/{userName}"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<UserDto>> getUserByUserName(@PathVariable("userName") String userName) throws Exception { 
-		LOGGER.info("=====> Looking for the user by user name");
+		LOGGER.info(customInstanceId + "=====> Looking for the user by user name");
 		if(StringUtils.isEmpty(userName)) {
 			UserRestException userRestException = new UserRestException();
 			userRestException.setErrorCode(HttpStatus.BAD_REQUEST);
@@ -63,7 +65,7 @@ public class UserController extends UserCommonExceptionHandlingController{
 	 */
 	@RequestMapping(value={"/v1.0/get-user-list", "/v1.1/get-user-list"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<List<UserDto>>> getUserList() throws Exception { 
-		LOGGER.info("=====> Getting the list of user");
+		LOGGER.info(customInstanceId + "=====> Getting the list of user");
 		List<UserDto> userDtoList = null;
 		userDtoList=userService.findAllUsers();
 		if(userDtoList==null || userDtoList.isEmpty() || userDtoList.size()<1) {
@@ -83,7 +85,7 @@ public class UserController extends UserCommonExceptionHandlingController{
 	 */
 	@RequestMapping(value={"/v1.2/register"},method= RequestMethod.POST, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<UserDto>> registerUser(@RequestBody UserDto userDto) throws Exception {
-		LOGGER.info("=====> Registration of user");
+		LOGGER.info(customInstanceId + "=====> Registration of user");
 		if(StringUtils.isEmpty(userDto.getfName()) || StringUtils.isEmpty(userDto.getlName()) || StringUtils.isEmpty(userDto.getContacNo()) 
 				|| StringUtils.isEmpty(userDto.getAddress()) || StringUtils.isEmpty(userDto.getCountry()) || StringUtils.isEmpty(userDto.getState())
 				|| StringUtils.isEmpty(userDto.getDob()) || StringUtils.isEmpty(userDto.getEmail()) || StringUtils.isEmpty(userDto.getPan()) 
@@ -113,7 +115,7 @@ public class UserController extends UserCommonExceptionHandlingController{
 	 */
 	@RequestMapping(value={"/v1.0/login", "/v1.1/login"},method= RequestMethod.POST, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<UserDto>> loginUser(@RequestBody UserDto userDto) throws Exception { 
-		LOGGER.info("=====> User login");
+		LOGGER.info(customInstanceId + "=====> User login");
 		String userName = userDto.getUserName();
 		String password = userDto.getPassword();
 		if(StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {

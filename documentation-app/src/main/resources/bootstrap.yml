@@ -37,9 +37,18 @@ zuul:
       path: /auth/loan-service/**
       serviceId: loan-service
    
-ribbon:
-  eureka:
+hystrix:
+  metrics:
     enabled: true
+  enabled: true
+management:
+  endpoint: 
+    hystrix: 
+      stream: 
+        enabled: true
+    web:
+      exposure: 
+        include: "*"
  
 eureka:
   instance:

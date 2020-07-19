@@ -22,6 +22,8 @@ public class ResponseEvent<T> implements Serializable{
 	
 	private Boolean status;
 	
+	public ResponseEvent() {}
+	
 	public ResponseEvent(T payload) {
 		this.payload = payload;
 		this.setStatus(true);

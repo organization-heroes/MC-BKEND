@@ -32,6 +32,9 @@
 		<module>h2db-initializer</module>
 		<module>user-service</module>
 		<module>document-service</module>
+		<module>loan-service</module>
+		<module>aggregator-service</module>
+		<module>auth-center</module>
 		<module>common</module>
 		<module>documentation-app</module>
 	</modules>
