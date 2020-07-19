@@ -41,10 +41,10 @@ public class LoanController extends LoanCommonExceptionHandlingController{
     public ResponseEntity<ResponseEvent<LoanDto>> getLoanByLoanNum(@PathVariable("loanNum") String loanNum) throws Exception {
 		LOGGER.info(customInstanceId + "=====> Looking for loan by loan number {} ", loanNum);
 		if(StringUtils.isEmpty(loanNum)  ) {
-			LoanRestException userRestException = new LoanRestException();
-			userRestException.setErrorCode(HttpStatus.BAD_REQUEST);
-			userRestException.setErrorMessage("Loan inforamtion is missing !!");
-			throw userRestException;
+			LoanRestException loanRestException = new LoanRestException();
+			loanRestException.setErrorCode(HttpStatus.BAD_REQUEST);
+			loanRestException.setErrorMessage("Loan inforamtion is missing !!");
+			throw loanRestException;
 		}
 		LoanDto loanDto = null;
 		loanDto=loanService.findByLoanNum(loanNum);
@@ -64,20 +64,20 @@ public class LoanController extends LoanCommonExceptionHandlingController{
 	 * @throws Exception
 	 */
 	@RequestMapping(value={"/v1.0/get-multiple-loans", "/v1.1/get-multiple-loans"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
-    public ResponseEntity<ResponseEvent<List<LoanDto>>> getMultipleLoans(@RequestParam List<String> loanNumbers) throws Exception {
-		LOGGER.info(customInstanceId + "=====> Looking for multiple loan by loan numbers {} ", loanNumbers);
-		if(loanNumbers==null || loanNumbers.isEmpty() || loanNumbers.size()<1  ) {
-			LoanRestException userRestException = new LoanRestException();
-			userRestException.setErrorCode(HttpStatus.BAD_REQUEST);
-			userRestException.setErrorMessage("Loan inforamtion is missing !!");
-			throw userRestException;
+    public ResponseEntity<ResponseEvent<List<LoanDto>>> getMultipleLoans(@RequestParam List<Long> userIds) throws Exception {
+		LOGGER.info(customInstanceId + "=====> Looking for multiple loan by userIds {} ", userIds);
+		if(userIds==null || userIds.isEmpty() || userIds.size()<1  ) {
+			LoanRestException loanRestException = new LoanRestException();
+			loanRestException.setErrorCode(HttpStatus.BAD_REQUEST);
+			loanRestException.setErrorMessage("Loan inforamtion is missing !!");
+			throw loanRestException;
 		}
 		List<LoanDto> loanDtoList = null;
-		loanDtoList=loanService.findByLoanNumIn(loanNumbers);
+		loanDtoList=loanService.findByUserIdIn(userIds);
 		if(loanDtoList==null) {
 			LoanRestException loanRestException = new LoanRestException();
 			loanRestException.setErrorCode(HttpStatus.NO_CONTENT);
-			loanRestException.setErrorMessage("No such loan available for this loan number!");
+			loanRestException.setErrorMessage("No such loan available for this user!");
 			throw loanRestException;
 		}
 		return new ResponseEntity<ResponseEvent<List<LoanDto>>>(ResponseEvent.response(loanDtoList), HttpStatus.OK);

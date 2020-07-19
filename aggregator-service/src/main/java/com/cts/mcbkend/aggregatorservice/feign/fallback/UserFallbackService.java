@@ -21,7 +21,7 @@ public class UserFallbackService implements UserService{
 		LOGGER.info("Inside UserFallbackService");
 		AggregatorRestException aggregatorRestException = new AggregatorRestException();
 		aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
-		aggregatorRestException.setErrorMessage("User Name can not be empty");
+		aggregatorRestException.setErrorMessage("User service interrupted");
 		throw aggregatorRestException;
 	}
 }

@@ -63,9 +63,9 @@ public class LoanServiceImpl implements LoanService {
 	}
 	
 	@Override
-	public List<LoanDto> findByLoanNumIn(List<String> loanNumbers) {
+	public List<LoanDto> findByUserIdIn(List<Long> userIds) {
 		List<LoanDto> loanDtoList = null;
-		List<LoanEntity> loanEntityList = loanRepository.findByLoanNumIn(loanNumbers);
+		List<LoanEntity> loanEntityList = loanRepository.findByUserIdIn(userIds);
 		if(loanEntityList!=null) {
 			loanDtoList = loanEntityList.stream()
 		      .map(this::convertToDto)

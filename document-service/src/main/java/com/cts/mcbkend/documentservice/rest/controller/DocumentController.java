@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.mcbkend.documentservice.model.DocumentDto;
@@ -40,10 +41,10 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
     public ResponseEntity<ResponseEvent<DocumentDto>> getDocumentByLoanNumAndDocId(@PathVariable("loanNum") String loanNum, @PathVariable("docId") String docId) throws Exception { 
 		LOGGER.info(customInstanceId + "=====> Looking for document by loan number {} and docId {}", loanNum, docId);
 		if(StringUtils.isEmpty(loanNum) || StringUtils.isEmpty(docId) ) {
-			DocumentRestException userRestException = new DocumentRestException();
-			userRestException.setErrorCode(HttpStatus.BAD_REQUEST);
-			userRestException.setErrorMessage("Document inforamtion missing !!");
-			throw userRestException;
+			DocumentRestException documentRestException = new DocumentRestException();
+			documentRestException.setErrorCode(HttpStatus.BAD_REQUEST);
+			documentRestException.setErrorMessage("Document inforamtion missing !!");
+			throw documentRestException;
 		}
 		DocumentDto documentDto = null;
 		documentDto=documentService.findByLoanNumAndDocId(loanNum, docId);
@@ -75,6 +76,33 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 		}
 		return new ResponseEntity<ResponseEvent<List<DocumentDto>>>(ResponseEvent.response(documentDtoList), HttpStatus.OK);
 	}
+	
+	/**
+	 * 
+	 * @return ResponseEntity as list of category, all null values in object will be ignored
+	 * @throws Exception
+	 */
+	@RequestMapping(value={"/v1.0/get-multiple-documents", "/v1.1/get-multiple-documents"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
+    public ResponseEntity<ResponseEvent<List<DocumentDto>>> getMultipleDocuments(@RequestParam List<Long> userIds) throws Exception {
+		LOGGER.info(customInstanceId + "=====> Looking for multiple documents by userIds {} ", userIds);
+		if(userIds==null || userIds.isEmpty() || userIds.size()<1  ) {
+			DocumentRestException documentRestException = new DocumentRestException();
+			documentRestException.setErrorCode(HttpStatus.BAD_REQUEST);
+			documentRestException.setErrorMessage("Document inforamtion is missing !!");
+			throw documentRestException;
+		}
+		List<DocumentDto> documentDtoList = null;
+		documentDtoList=documentService.findByUserIdIn(userIds);
+		if(documentDtoList==null) {
+			DocumentRestException documentRestException = new DocumentRestException();
+			documentRestException.setErrorCode(HttpStatus.NO_CONTENT);
+			documentRestException.setErrorMessage("No such document available for this user!");
+			throw documentRestException;
+		}
+		return new ResponseEntity<ResponseEvent<List<DocumentDto>>>(ResponseEvent.response(documentDtoList), HttpStatus.OK);
+		
+	}
+	
 	
 	/**
 	 * 

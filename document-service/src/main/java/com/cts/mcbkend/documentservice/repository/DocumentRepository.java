@@ -18,6 +18,7 @@ public interface DocumentRepository extends JpaRepository<DocumentEntity, Intege
 	public List<DocumentEntity> findByApprvlStatusNot(String apprvlStatus);
 	public long countByUserIdAndLoanNum(Long userId , String loanNum);
 	public long deleteByLoanNumAndDocId(String loanNum, String docId);
+	public List<DocumentEntity> findByUserIdIn(List<Long> userIds);
 	@Modifying(flushAutomatically = true)
 	@Query("update DocumentEntity d set d.apprvlStatus  = :apprvlStatus where d.loanNum = :loanNum  and d.docId = :docId")
 	public long updateApprovalStatus(@Param("apprvlStatus") String apprvlStatus, @Param("loanNum") String loanNum, @Param("docId") String docId);

@@ -162,6 +162,18 @@ public class DocumentServiceImpl implements DocumentService {
 		return registerDocumentDto;
 	}
 	
+	@Override
+	public List<DocumentDto> findByUserIdIn(List<Long> userIds) {
+		List<DocumentDto> documentDtoList = null;
+		List<DocumentEntity> documentEntityList = documentRepository.findByUserIdIn(userIds);
+		if(documentEntityList!=null) {
+			documentDtoList = documentEntityList.stream()
+		      .map(this::convertToDto)
+		      .collect(Collectors.toList());
+		}
+		return documentDtoList;
+	}
+	
 	private DocumentDto convertToDto(DocumentEntity documentEntity) {
 		DocumentDto documentDto = modelMapper.map(documentEntity, DocumentDto.class);
 	    return documentDto;

@@ -15,5 +15,5 @@ public interface UserService {
 	
 	@RequestMapping(value={"/user/v1.0/get-user-list"}, method= RequestMethod.GET, produces = {"application/json, application/xml"})
 	public ResponseEvent<List<UserDto>> getUserList() throws Exception;
-	
+
 }

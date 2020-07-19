@@ -9,5 +9,5 @@ public interface LoanRepository extends JpaRepository<LoanEntity, Integer> {
 	public LoanEntity findById(Long id);
 	public List<LoanEntity> findByUserId(Long userId);
 	public LoanEntity findByLoanNum(String loanNum);
-	public List<LoanEntity> findByLoanNumIn(List<String> loanNumbers);
+	public List<LoanEntity> findByUserIdIn(List<Long> userIds);
 }

@@ -15,4 +15,5 @@ public interface DocumentService {
 	public DocumentDto findByLoanNumAndDocId(String loanNum, String docId);
 	public DocumentDto addLoanDocument(DocumentDto documentDto) throws Exception;
 	public DocumentDto updateLoanDocument(Long docPrimaryId, DocumentDto documentDto) throws Exception;
+	public List<DocumentDto> findByUserIdIn(List<Long> userIds);
 }
