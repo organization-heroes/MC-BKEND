@@ -3,12 +3,14 @@ package com.cts.mcbkend.aggregatorservice.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cts.mcbkend.aggregatorservice.feign.UserService;
 import com.cts.mcbkend.aggregatorservice.model.UserDto;
 import com.cts.mcbkend.aggregatorservice.model.UserLoanDto;
+import com.cts.mcbkend.aggregatorservice.rest.controller.AggregatorController;
 import com.cts.mcbkend.aggregatorservice.rest.event.ResponseEvent;
 import com.cts.mcbkend.aggregatorservice.service.AggregatorService;
 

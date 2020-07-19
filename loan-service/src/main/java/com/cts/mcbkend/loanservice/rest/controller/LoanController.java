@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.mcbkend.loanservice.model.LoanDto;
@@ -54,6 +55,32 @@ public class LoanController extends LoanCommonExceptionHandlingController{
 			throw loanRestException;
 		}
 		return new ResponseEntity<ResponseEvent<LoanDto>>(ResponseEvent.response(loanDto), HttpStatus.OK);
+		
+	}
+	
+	/**
+	 * 
+	 * @return ResponseEntity as list of category, all null values in object will be ignored
+	 * @throws Exception
+	 */
+	@RequestMapping(value={"/v1.0/get-multiple-loans", "/v1.1/get-multiple-loans"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
+    public ResponseEntity<ResponseEvent<List<LoanDto>>> getMultipleLoans(@RequestParam List<String> loanNumbers) throws Exception {
+		LOGGER.info(customInstanceId + "=====> Looking for multiple loan by loan numbers {} ", loanNumbers);
+		if(loanNumbers==null || loanNumbers.isEmpty() || loanNumbers.size()<1  ) {
+			LoanRestException userRestException = new LoanRestException();
+			userRestException.setErrorCode(HttpStatus.BAD_REQUEST);
+			userRestException.setErrorMessage("Loan inforamtion is missing !!");
+			throw userRestException;
+		}
+		List<LoanDto> loanDtoList = null;
+		loanDtoList=loanService.findByLoanNumIn(loanNumbers);
+		if(loanDtoList==null) {
+			LoanRestException loanRestException = new LoanRestException();
+			loanRestException.setErrorCode(HttpStatus.NO_CONTENT);
+			loanRestException.setErrorMessage("No such loan available for this loan number!");
+			throw loanRestException;
+		}
+		return new ResponseEntity<ResponseEvent<List<LoanDto>>>(ResponseEvent.response(loanDtoList), HttpStatus.OK);
 		
 	}
 	
