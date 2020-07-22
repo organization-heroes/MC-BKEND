@@ -2,6 +2,8 @@ package com.cts.mcbkend.aggregatorservice.rest.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,11 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 
 	@Autowired
 	private AggregatorService aggregatorService;
+	
+	@Autowired
+	private HttpServletRequest request;
+	
+	
 	/**
 	 * 
 	 * @return ResponseEntity as list of category, all null values in object will be ignored
@@ -35,7 +42,7 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 	 */
 	@RequestMapping(value={"/v1.0/get-document/loanNumber/{loanNum}/docId/{docId}", "/v1.1/get-document/loanNumber/{loanNum}/docId/{docId}"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<DocumentDto>> getDocumentByLoanNumAndDocId(@PathVariable("loanNum") String loanNum, @PathVariable("docId") String docId) throws Exception { 
-		LOGGER.info("=====> Looking for document by loan number {} and docId {}", loanNum, docId);
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> Looking for document by loan number {} and docId {}", loanNum, docId);
 		if(StringUtils.isEmpty(loanNum) || StringUtils.isEmpty(docId) ) {
 			AggregatorRestException userRestException = new AggregatorRestException();
 			userRestException.setErrorCode(HttpStatus.BAD_REQUEST);
@@ -60,9 +67,9 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 	 */
 	@RequestMapping(value={"/v1.0/get-all-user-loans", "/v1.1/get-all-user-loans"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<List<UserLoanDto>>> getAllUserLoanList() throws Exception {
-		LOGGER.info("=====> Get all user loans with document details");
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> Get all user loans with document details");
 		List<UserLoanDto> userLoanDtoList = null;
-		userLoanDtoList=aggregatorService.getAllUserLoanList();
+		userLoanDtoList=aggregatorService.getAllUserLoanList(request.getHeader("AUTH_HEADER") );
 		if(userLoanDtoList==null || userLoanDtoList.isEmpty() || userLoanDtoList.size()<1) {
 			AggregatorRestException aggregatorRestException = new AggregatorRestException();
 			aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
@@ -79,7 +86,7 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 	 */
 	@RequestMapping(value={"/v1.2/add-document"},method= RequestMethod.POST, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<DocumentDto>> addLoanDocument(@RequestBody DocumentDto documentDto) throws Exception {
-		LOGGER.info("=====> Adding document to the loan");
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> Adding document to the loan");
 		if(StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
 				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
 				|| StringUtils.isEmpty(documentDto.getUserId())) {
@@ -106,7 +113,7 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 	 */
 	@RequestMapping(value={"/v1.2/modify-document/documentIndex/{documentIndex}"},method= RequestMethod.PUT, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<DocumentDto>> updateLoanDocument(@PathVariable("documentIndex") Long documentIndex, @RequestBody DocumentDto documentDto) throws Exception {
-		LOGGER.info("=====> udating the loan by document index {}", documentIndex);
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> udating the loan by document index {}", documentIndex);
 		if(StringUtils.isEmpty(documentDto.getApprvlStatus()) || StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
 				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
 				|| StringUtils.isEmpty(documentDto.getUserId())) {
@@ -133,7 +140,7 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 	 */
 	@RequestMapping(value={"/v1.2/delete-document/documentIndex/{documentIndex}"},method= RequestMethod.DELETE, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<String>> deleteLoanDocument(@PathVariable("documentIndex") Long documentIndex, @RequestBody DocumentDto documentDto) throws Exception {
-		LOGGER.info("\"=====> deleting of document by document index {}", documentIndex);
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> deleting of document by document index {}", documentIndex);
 		if(StringUtils.isEmpty(documentDto.getApprvlStatus()) || StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
 				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
 				|| StringUtils.isEmpty(documentDto.getUserId())) {

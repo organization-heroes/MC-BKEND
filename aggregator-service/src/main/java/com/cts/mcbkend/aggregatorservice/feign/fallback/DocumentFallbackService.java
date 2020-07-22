@@ -18,8 +18,8 @@ public class DocumentFallbackService implements DocumentService{
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DocumentFallbackService.class);
 
 	@Override
-	public ResponseEvent<List<DocumentDto>> getMultipleDocuments(@RequestParam List<Long> userIds) throws Exception {
-		LOGGER.info("Inside DocumentFallbackService");
+	public ResponseEvent<List<DocumentDto>> getMultipleDocuments(String header, @RequestParam List<Long> userIds) throws Exception {
+		LOGGER.info("sessionID: "+header +"--Inside DocumentFallbackService");
 		AggregatorRestException aggregatorRestException = new AggregatorRestException();
 		aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
 		aggregatorRestException.setErrorMessage("Document sevice interrupted");

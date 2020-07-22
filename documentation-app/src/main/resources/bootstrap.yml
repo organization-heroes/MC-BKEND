@@ -1,3 +1,7 @@
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+
 server:
   port: 8800
   
@@ -27,6 +31,9 @@ zuul:
     loan-service-api: 
       path: /loan-service/**
       serviceId: loan-service
+    aggregator-service-api: 
+      path: /aggregator-service/**
+      serviceId: aggregator-service
     document-service: 
       path: /auth/document-service/**
       serviceId: document-service
@@ -36,20 +43,24 @@ zuul:
     loan-service: 
       path: /auth/loan-service/**
       serviceId: loan-service
+    aggregator-service: 
+      path: /auth/aggregator-service/**
+      serviceId: aggregator-service
    
 hystrix:
   metrics:
     enabled: true
   enabled: true
+
 management:
-  endpoint: 
-    hystrix: 
-      stream: 
-        enabled: true
-    web:
-      exposure: 
-        include: "*"
- 
+  endpoints:
+    hystrix.stream.enabled: true
+    web.exposure.include: hystrix.stream
+
+feign:
+  hsytrix:
+    enabled: true
+    
 eureka:
   instance:
     appname: documentation-app

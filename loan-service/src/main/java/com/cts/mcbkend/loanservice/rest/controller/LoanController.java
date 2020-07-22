@@ -2,6 +2,8 @@ package com.cts.mcbkend.loanservice.rest.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +34,9 @@ public class LoanController extends LoanCommonExceptionHandlingController{
 
 	@Autowired
 	private LoanService loanService;
+	
+	@Autowired
+	private HttpServletRequest request;
 	/**
 	 * 
 	 * @return ResponseEntity as list of category, all null values in object will be ignored
@@ -39,7 +44,7 @@ public class LoanController extends LoanCommonExceptionHandlingController{
 	 */
 	@RequestMapping(value={"/v1.0/get-loan/loanNumber/{loanNum}", "/v1.1/get-loan/loanNumber/{loanNum}"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<LoanDto>> getLoanByLoanNum(@PathVariable("loanNum") String loanNum) throws Exception {
-		LOGGER.info(customInstanceId + "=====> Looking for loan by loan number {} ", loanNum);
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Looking for loan by loan number {} ", loanNum);
 		if(StringUtils.isEmpty(loanNum)  ) {
 			LoanRestException loanRestException = new LoanRestException();
 			loanRestException.setErrorCode(HttpStatus.BAD_REQUEST);
@@ -65,7 +70,7 @@ public class LoanController extends LoanCommonExceptionHandlingController{
 	 */
 	@RequestMapping(value={"/v1.0/get-multiple-loans", "/v1.1/get-multiple-loans"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<List<LoanDto>>> getMultipleLoans(@RequestParam List<Long> userIds) throws Exception {
-		LOGGER.info(customInstanceId + "=====> Looking for multiple loan by userIds {} ", userIds);
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Looking for multiple loan by userIds {} ", userIds);
 		if(userIds==null || userIds.isEmpty() || userIds.size()<1  ) {
 			LoanRestException loanRestException = new LoanRestException();
 			loanRestException.setErrorCode(HttpStatus.BAD_REQUEST);
@@ -91,7 +96,7 @@ public class LoanController extends LoanCommonExceptionHandlingController{
 	 */
 	@RequestMapping(value={"/v1.0/get-loan-records", "/v1.1/get-loan-records"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<List<LoanDto>>> findAllAvailableLoans() throws Exception {
-		LOGGER.info(customInstanceId + "=====> Get all available loans");
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Get all available loans");
 		List<LoanDto> loanDtoList = null;
 		loanDtoList=loanService.fetchAllLoans();
 		if(loanDtoList==null || loanDtoList.isEmpty() || loanDtoList.size()<1) {
@@ -110,7 +115,7 @@ public class LoanController extends LoanCommonExceptionHandlingController{
 	 */
 	@RequestMapping(value={"/v1.2/create-loan"},method= RequestMethod.POST, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<LoanDto>> createNewLoan(@RequestBody LoanDto loanDto) throws Exception {
-		LOGGER.info(customInstanceId + "=====> Creating the loan");
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Creating the loan");
 		if(StringUtils.isEmpty(loanDto.getLoanDesc()) || StringUtils.isEmpty(loanDto.getLoanNum()) 
 				|| StringUtils.isEmpty(loanDto.getLoanStatus()) || StringUtils.isEmpty(loanDto.getLoanType())
 				|| StringUtils.isEmpty(loanDto.getUserId())) {
@@ -138,7 +143,7 @@ public class LoanController extends LoanCommonExceptionHandlingController{
 	 */
 	@RequestMapping(value={"/v1.2/modify-loan/loanNumber/{loanNum}"},method= RequestMethod.PUT, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<LoanDto>> updateLoan(@PathVariable("loanNum") String loanNum, @RequestBody LoanDto loanDto) throws Exception {
-		LOGGER.info(customInstanceId + "=====> udating the loan by loan number {}", loanNum);
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> udating the loan by loan number {}", loanNum);
 		if(StringUtils.isEmpty(loanDto.getLoanDesc()) || StringUtils.isEmpty(loanDto.getLoanNum()) 
 				|| StringUtils.isEmpty(loanDto.getLoanStatus()) || StringUtils.isEmpty(loanDto.getLoanType())
 				|| StringUtils.isEmpty(loanDto.getUserId()) || StringUtils.isEmpty(loanDto.getVersion())) {

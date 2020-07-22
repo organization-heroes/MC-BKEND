@@ -34,7 +34,7 @@ public class AggregatorServiceImpl implements AggregatorService {
 	private DocumentService documentService;
 
 	@Override
-	public List<UserLoanDto> getAllUserLoanList() throws Exception {
+	public List<UserLoanDto> getAllUserLoanList(String header) throws Exception {
 		
 		List<UserLoanDto> userLoanDtoList = new ArrayList<UserLoanDto>();
 		List<LoanDocumentDto> loanDocumentList= null;
@@ -47,49 +47,54 @@ public class AggregatorServiceImpl implements AggregatorService {
 		ResponseEvent<List<DocumentDto>> listDocumentDtoResponse = null;
 		Set<Long> userIds = new HashSet<Long>();
 		
-		listUserDtoResponse = userService.getUserList();
+		listUserDtoResponse = userService.getUserList(header);
 		userDtoList = listUserDtoResponse.getPayload();
 		userDtoList.stream().forEach((userDto) -> userIds.add(userDto.getId()));
 		
-		listLoanDtoResponse = loanService.getMultipleLoans(new ArrayList<Long>(userIds));
+		listLoanDtoResponse = loanService.getMultipleLoans(header, new ArrayList<Long>(userIds));
 		loanDtoList = listLoanDtoResponse.getPayload();
 		Map<Long, List<LoanDto>> userLoanMap = loanDtoList.stream().collect(Collectors.groupingBy(w -> w.getUserId()));
 		
-		listDocumentDtoResponse = documentService.getMultipleDocuments(new ArrayList<Long>(userIds));
+		listDocumentDtoResponse = documentService.getMultipleDocuments(header, new ArrayList<Long>(userIds));
 		documentDtoList = listDocumentDtoResponse.getPayload();
 		Map<String, List<DocumentDto>> loanDocumentMap = documentDtoList.stream().collect(Collectors.groupingBy(w -> w.getLoanNum()));
 		
-		for(UserDto eachUserDto: userDtoList) {
-			userLoanDto = new UserLoanDto();
-			userLoanDto.setUserId(eachUserDto.getId());
-			userLoanDto.setAddress(eachUserDto.getAddress());
-			userLoanDto.setContacNo(eachUserDto.getContacNo());
-			userLoanDto.setCountry(userLoanDto.getCountry());
-			userLoanDto.setDob(eachUserDto.getDob());
-			userLoanDto.setEmail(eachUserDto.getEmail());
-			userLoanDto.setfName(eachUserDto.getfName());
-			userLoanDto.setlName(eachUserDto.getlName());
-			userLoanDto.setPan(eachUserDto.getPan());
-			userLoanDto.setRole(eachUserDto.getRole());
-			userLoanDto.setSsn(eachUserDto.getSsn());
-			userLoanDto.setState(eachUserDto.getState());
-			userLoanDto.setUserName(eachUserDto.getUserName());
-			List<LoanDto> loanDtoListObj = userLoanMap.get(eachUserDto.getId());
-			loanDocumentList = new ArrayList<LoanDocumentDto>();
-			for(LoanDto eachLoanDtoObj: loanDtoListObj) {
-				LoanDocumentDto loanDocumentDto = new LoanDocumentDto();
-				loanDocumentDto.setDocumentList(loanDocumentMap.get(eachLoanDtoObj.getLoanNum()));
-				loanDocumentDto.setLoanDesc(eachLoanDtoObj.getLoanDesc());
-				loanDocumentDto.setLoanId(eachLoanDtoObj.getId());
-				loanDocumentDto.setLoanNum(eachLoanDtoObj.getLoanNum());
-				loanDocumentDto.setLoanStatus(eachLoanDtoObj.getLoanNum());
-				loanDocumentDto.setLoanType(eachLoanDtoObj.getLoanType());
-				loanDocumentDto.setLockId(eachLoanDtoObj.getLockId());
-				loanDocumentDto.setVersion(eachLoanDtoObj.getVersion()+1);
-				loanDocumentList.add(loanDocumentDto);
+		if(userDtoList!=null) {
+			for(UserDto eachUserDto: userDtoList) {
+				userLoanDto = new UserLoanDto();
+				userLoanDto.setUserId(eachUserDto.getId());
+				userLoanDto.setAddress(eachUserDto.getAddress());
+				userLoanDto.setContacNo(eachUserDto.getContacNo());
+				userLoanDto.setCountry(userLoanDto.getCountry());
+				userLoanDto.setDob(eachUserDto.getDob());
+				userLoanDto.setEmail(eachUserDto.getEmail());
+				userLoanDto.setfName(eachUserDto.getfName());
+				userLoanDto.setlName(eachUserDto.getlName());
+				userLoanDto.setPan(eachUserDto.getPan());
+				userLoanDto.setRole(eachUserDto.getRole());
+				userLoanDto.setSsn(eachUserDto.getSsn());
+				userLoanDto.setState(eachUserDto.getState());
+				userLoanDto.setUserName(eachUserDto.getUserName());
+				List<LoanDto> loanDtoListObj = userLoanMap.get(eachUserDto.getId());
+				loanDocumentList = new ArrayList<LoanDocumentDto>();
+				if(loanDtoListObj!=null) {
+					for(LoanDto eachLoanDtoObj: loanDtoListObj) {
+						LoanDocumentDto loanDocumentDto = new LoanDocumentDto();
+						loanDocumentDto.setDocumentList(loanDocumentMap.get(eachLoanDtoObj.getLoanNum()));
+						loanDocumentDto.setLoanDesc(eachLoanDtoObj.getLoanDesc());
+						loanDocumentDto.setLoanId(eachLoanDtoObj.getId());
+						loanDocumentDto.setLoanNum(eachLoanDtoObj.getLoanNum());
+						loanDocumentDto.setLoanStatus(eachLoanDtoObj.getLoanNum());
+						loanDocumentDto.setLoanType(eachLoanDtoObj.getLoanType());
+						loanDocumentDto.setLockId(eachLoanDtoObj.getLockId());
+						loanDocumentDto.setVersion(eachLoanDtoObj.getVersion()+1);
+						loanDocumentList.add(loanDocumentDto);
+					}
+				}
+				userLoanDto.setLoanDocumentList(loanDocumentList);
+				userLoanDtoList.add(userLoanDto);
+			
 			}
-			userLoanDto.setLoanDocumentList(loanDocumentList);
-			userLoanDtoList.add(userLoanDto);
 		}
 		return userLoanDtoList;
 	}

@@ -2,6 +2,8 @@ package com.cts.mcbkend.documentservice.rest.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +34,9 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 	
 	@Autowired
 	private DocumentService documentService;
+	
+	@Autowired
+	private HttpServletRequest request;
 	/**
 	 * 
 	 * @return ResponseEntity as list of category, all null values in object will be ignored
@@ -39,7 +44,7 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 	 */
 	@RequestMapping(value={"/v1.0/get-document/loanNumber/{loanNum}/docId/{docId}", "/v1.1/get-document/loanNumber/{loanNum}/docId/{docId}"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<DocumentDto>> getDocumentByLoanNumAndDocId(@PathVariable("loanNum") String loanNum, @PathVariable("docId") String docId) throws Exception { 
-		LOGGER.info(customInstanceId + "=====> Looking for document by loan number {} and docId {}", loanNum, docId);
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Looking for document by loan number {} and docId {}", loanNum, docId);
 		if(StringUtils.isEmpty(loanNum) || StringUtils.isEmpty(docId) ) {
 			DocumentRestException documentRestException = new DocumentRestException();
 			documentRestException.setErrorCode(HttpStatus.BAD_REQUEST);
@@ -65,7 +70,7 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 	 */
 	@RequestMapping(value={"/v1.0/get-document-list", "/v1.1/get-document-list"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<List<DocumentDto>>> findAllAvailableDocuments() throws Exception {
-		LOGGER.info(customInstanceId + "=====> Get all available documents");
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Get all available documents");
 		List<DocumentDto> documentDtoList = null;
 		documentDtoList=documentService.findByApprvlStatusIsAvalilable();
 		if(documentDtoList==null || documentDtoList.isEmpty() || documentDtoList.size()<1) {
@@ -84,7 +89,7 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 	 */
 	@RequestMapping(value={"/v1.0/get-multiple-documents", "/v1.1/get-multiple-documents"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<List<DocumentDto>>> getMultipleDocuments(@RequestParam List<Long> userIds) throws Exception {
-		LOGGER.info(customInstanceId + "=====> Looking for multiple documents by userIds {} ", userIds);
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Looking for multiple documents by userIds {} ", userIds);
 		if(userIds==null || userIds.isEmpty() || userIds.size()<1  ) {
 			DocumentRestException documentRestException = new DocumentRestException();
 			documentRestException.setErrorCode(HttpStatus.BAD_REQUEST);
@@ -111,7 +116,7 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 	 */
 	@RequestMapping(value={"/v1.2/add-document"},method= RequestMethod.POST, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<DocumentDto>> addLoanDocument(@RequestBody DocumentDto documentDto) throws Exception {
-		LOGGER.info(customInstanceId + "=====> Adding document to the loan");
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Adding document to the loan");
 		if(StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
 				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
 				|| StringUtils.isEmpty(documentDto.getUserId())) {
@@ -139,7 +144,7 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 	 */
 	@RequestMapping(value={"/v1.2/modify-document/documentIndex/{documentIndex}"},method= RequestMethod.PUT, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<DocumentDto>> updateLoanDocument(@PathVariable("documentIndex") Long documentIndex, @RequestBody DocumentDto documentDto) throws Exception {
-		LOGGER.info(customInstanceId + "=====> udating the loan by document index {}", documentIndex);
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> udating the loan by document index {}", documentIndex);
 		if(StringUtils.isEmpty(documentDto.getApprvlStatus()) || StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
 				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
 				|| StringUtils.isEmpty(documentDto.getUserId())) {
@@ -167,7 +172,7 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 	 */
 	@RequestMapping(value={"/v1.2/delete-document/documentIndex/{documentIndex}"},method= RequestMethod.DELETE, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<String>> deleteLoanDocument(@PathVariable("documentIndex") Long documentIndex, @RequestBody DocumentDto documentDto) throws Exception {
-		LOGGER.info(customInstanceId + "=====> deleting of document by document index {}", documentIndex);
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> deleting of document by document index {}", documentIndex);
 		if(StringUtils.isEmpty(documentDto.getApprvlStatus()) || StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
 				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
 				|| StringUtils.isEmpty(documentDto.getUserId())) {

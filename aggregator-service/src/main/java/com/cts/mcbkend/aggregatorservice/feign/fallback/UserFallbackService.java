@@ -17,8 +17,8 @@ public class UserFallbackService implements UserService{
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserFallbackService.class);
 
 	@Override
-	public ResponseEvent<List<UserDto>> getUserList() throws Exception {
-		LOGGER.info("Inside UserFallbackService");
+	public ResponseEvent<List<UserDto>> getUserList(String header) throws Exception {
+		LOGGER.info("sessionID: "+header +"Inside UserFallbackService");
 		AggregatorRestException aggregatorRestException = new AggregatorRestException();
 		aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
 		aggregatorRestException.setErrorMessage("User service interrupted");

@@ -18,8 +18,8 @@ public class LoanFallbackService implements LoanService{
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LoanFallbackService.class);
 
 	@Override
-	public ResponseEvent<List<LoanDto>> getMultipleLoans(@RequestParam List<Long> userIds) throws Exception {
-		LOGGER.info("Inside LoanFallbackService");
+	public ResponseEvent<List<LoanDto>> getMultipleLoans(String header, @RequestParam List<Long> userIds) throws Exception {
+		LOGGER.info("sessionID: "+header +"--Inside LoanFallbackService");
 		AggregatorRestException aggregatorRestException = new AggregatorRestException();
 		aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
 		aggregatorRestException.setErrorMessage("Loan sevice interrupted");
