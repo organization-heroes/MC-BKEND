@@ -38,8 +38,11 @@ public class AuthHeaderFilter extends ZuulFilter {
 		    		sessionId = UUID.randomUUID().toString();
 		    	} 
 		    	
-		    	ctx.addZuulRequestHeader("AUTH_HEADER", sessionId);
+		    	
+		    } else {
+		    		sessionId = UUID.randomUUID().toString();
 		    }
+		    ctx.addZuulRequestHeader("AUTH_HEADER", sessionId);
 		    return null;
 	}
 

@@ -5,5 +5,7 @@ import java.util.List;
 import com.cts.mcbkend.aggregatorservice.model.UserLoanDto;
 
 public interface AggregatorService {
-	public List<UserLoanDto> getAllUserLoanList(String header) throws Exception;
+	public List<UserLoanDto> getAllUserLoanList(String authorizationHeader) throws Exception;
+
+	public UserLoanDto createUserWithLoan(String authorizationHeader, UserLoanDto userLoanDto) throws Exception;
 }

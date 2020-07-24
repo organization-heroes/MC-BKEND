@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +19,7 @@ import com.cts.mcbkend.aggregatorservice.rest.exception.ErrorResponse;
  * @since 30-Nov-2018
  * @Purpose This object will return the custom exception in the rest call
  */
-@RestController("documentCommonExceptionHandlingController")
+@RestController("aggregatorCommonExceptionHandlingController")
 public class AggregatorCommonExceptionHandlingController {
 	
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AggregatorCommonExceptionHandlingController.class);

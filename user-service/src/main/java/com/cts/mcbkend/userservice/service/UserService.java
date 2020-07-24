@@ -9,4 +9,5 @@ public interface UserService {
 	public UserDto findByUserNameAndPassword(String userName, String password);
 	public List<UserDto> findAllUsers();
 	public UserDto registerUser(UserDto userDto) throws Exception;
+	public String deleteByUserId(Long userId, UserDto userDto)  throws Exception;
 }

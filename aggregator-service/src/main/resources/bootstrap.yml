@@ -27,8 +27,26 @@ eureka:
     
 feign.hystrix.enabled: true
 
-hystrix.metrics.enabled: true
-
+hystrix:
+  metrics:
+    enabled: true
+  threadpool:
+   default:
+     coreSize: 100                  # Hystrix Thread Pool default size
+     maximumSize: 500              # Hystrix Thread Pool default size
+     keepAliveTimeMinutes: 1
+     allowMaximumSizeToDivergeFromCoreSize: true
+  command:
+   default:
+     execution:
+       isolation:
+         thread:
+           timeoutInMilliseconds: 180000         
+     circuitBreaker:
+       requestVolumeThreshold: 2                
+       errorThresholdPercentage: 50        # requestVolumn, exceeds circuit open
+       enabled: true
+     
 management:
 endpoints:
  web:

@@ -84,25 +84,32 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 	 * @return ResponseEntity as list of category, all null values in object will be ignored
 	 * @throws Exception
 	 */
-	@RequestMapping(value={"/v1.2/add-document"},method= RequestMethod.POST, produces = {"application/json", "application/xml"})
-    public ResponseEntity<ResponseEvent<DocumentDto>> addLoanDocument(@RequestBody DocumentDto documentDto) throws Exception {
-		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> Adding document to the loan");
-		if(StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
-				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
-				|| StringUtils.isEmpty(documentDto.getUserId())) {
+	@RequestMapping(value={"/v1.2/register-user"},method= RequestMethod.POST, produces = {"application/json", "application/xml"})
+    public ResponseEntity<ResponseEvent<UserLoanDto>> createUserWithLoan(@RequestBody UserLoanDto userLoanDto) throws Exception {
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> Adding user ");
+		if(StringUtils.isEmpty(userLoanDto.getfName()) || StringUtils.isEmpty(userLoanDto.getlName()) || StringUtils.isEmpty(userLoanDto.getContacNo()) 
+				|| StringUtils.isEmpty(userLoanDto.getAddress()) || StringUtils.isEmpty(userLoanDto.getCountry()) || StringUtils.isEmpty(userLoanDto.getState())
+				|| StringUtils.isEmpty(userLoanDto.getDob()) || StringUtils.isEmpty(userLoanDto.getEmail()) || StringUtils.isEmpty(userLoanDto.getPan()) 
+				|| StringUtils.isEmpty(userLoanDto.getPassword())|| StringUtils.isEmpty(userLoanDto.getRole()) || StringUtils.isEmpty(userLoanDto.getSsn()) 
+				|| StringUtils.isEmpty(userLoanDto.getUserName())|| userLoanDto.getLoanDocumentList()==null || userLoanDto.getLoanDocumentList().isEmpty()
+				||userLoanDto.getLoanDocumentList().size()<1||StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanDesc()) 
+				|| StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanNum()) 
+				|| StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanStatus()) 
+				|| StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanType())) {
 			AggregatorRestException aggregatorRestException = new AggregatorRestException();
 			aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
-			aggregatorRestException.setErrorMessage("Document inforamtion missing !!");
+			aggregatorRestException.setErrorMessage("User inforamtion or Loan infromation is missing !!");
 			throw aggregatorRestException;
 		}
-		DocumentDto addedDocumentDto = null;
-		if(addedDocumentDto.getId()==null || addedDocumentDto.getId()<1) {
+		UserLoanDto addedUserLoanDto = null;
+		addedUserLoanDto = aggregatorService.createUserWithLoan(request.getHeader("AUTH_HEADER"), userLoanDto);
+		if(addedUserLoanDto.getUserId()==null || addedUserLoanDto.getUserId()<1) {
 			AggregatorRestException aggregatorRestException = new AggregatorRestException();
 			aggregatorRestException.setErrorCode(HttpStatus.NOT_FOUND);
-			aggregatorRestException.setErrorMessage("No documents available!");
+			aggregatorRestException.setErrorMessage("User registration fails!");
 			throw aggregatorRestException;
 		}
-		return new ResponseEntity<ResponseEvent<DocumentDto>>(ResponseEvent.response(addedDocumentDto), HttpStatus.CREATED);
+		return new ResponseEntity<ResponseEvent<UserLoanDto>>(ResponseEvent.response(addedUserLoanDto), HttpStatus.CREATED);
 		
 	}
 	

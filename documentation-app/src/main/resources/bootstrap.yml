@@ -5,8 +5,8 @@ logging:
 server:
   port: 8800
   
-info:
-  component: Edge Server
+
+spring.application.name: documentation-app
   
 endpoints:
   restart:
@@ -51,6 +51,22 @@ hystrix:
   metrics:
     enabled: true
   enabled: true
+  threadpool:
+    default:
+      coreSize: 100  # Hystrix Thread Pool default size
+      maximumSize: 500  # Hystrix Thread Pool default size
+      keepAliveTimeMinutes: 1
+      allowMaximumSizeToDivergeFromCoreSize: true
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000     
+      circuitBreaker:
+        requestVolumeThreshold: 2           
+        errorThresholdPercentage: 50       
+        enabled: true
 
 management:
   endpoints:
@@ -68,7 +84,8 @@ eureka:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
   client:
     enabled: true
-    registerWithEureka: false
+    registerWithEureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://localhost:8760/eureka/
     registryFetchIntervalSeconds: 1

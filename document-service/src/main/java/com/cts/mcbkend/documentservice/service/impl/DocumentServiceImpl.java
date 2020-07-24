@@ -93,7 +93,7 @@ public class DocumentServiceImpl implements DocumentService {
 		count = documentRepository.countByUserIdAndLoanNum(documentDto.getUserId(), documentDto.getLoanNum());
 		if(count == 0) {
 			status = "User/Loan is not valid";
-		}else if(count > 1) {
+		}else if(count > 0) {
 			updateStatus = documentRepository.deleteByLoanNumAndDocId(documentDto.getLoanNum(), documentDto.getDocId());
 			if(updateStatus>0) {
 				status = "Document deleted successfully for loan number "+documentDto.getLoanNum();

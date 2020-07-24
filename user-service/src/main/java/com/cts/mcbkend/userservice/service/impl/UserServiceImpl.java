@@ -83,5 +83,25 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
 	    return userEntity;
 	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
+	public String deleteByUserId(Long userId, UserDto userDto) throws Exception {
+		long count = 0;
+		long updateStatus = 0;
+		String status = null;
+		count = userRepository.countById(userId);
+		if(count == 0) {
+			status = "User is not valid";
+		}else if(count > 0) {
+			updateStatus = userRepository.deleteById(userId);
+			if(updateStatus>0) {
+				status = "User deleted successfully of user id "+userDto.getId();
+			} else  {
+				status = "Document deleted is failed for user id "+userDto.getId();
+			}
+		}
+		return status;
+	}
 	
 }

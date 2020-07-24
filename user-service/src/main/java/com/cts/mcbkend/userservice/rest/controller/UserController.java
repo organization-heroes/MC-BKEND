@@ -139,4 +139,26 @@ public class UserController extends UserCommonExceptionHandlingController{
 		return new ResponseEntity<ResponseEvent<UserDto>>(ResponseEvent.response(loginUserDto), HttpStatus.OK);
 		
 	}
+	
+	/**
+	 * 
+	 * @return ResponseEntity as list of category, all null values in object will be ignored
+	 * @throws Exception
+	 */
+	@RequestMapping(value={"/v1.2/delete-user/userId/{userId}"},method= RequestMethod.DELETE, produces = {"application/json", "application/xml"})
+    public ResponseEntity<ResponseEvent<String>> deleteUser(@PathVariable("userId") Long userId, @RequestBody UserDto userDto) throws Exception {
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> deleting of user by user id {}, userDto {}", userId, userDto);
+		if(userId==null || userId<1|| !userId.equals(userDto.getId())||StringUtils.isEmpty(userDto.getfName()) || StringUtils.isEmpty(userDto.getlName()) || StringUtils.isEmpty(userDto.getContacNo()) 
+				|| StringUtils.isEmpty(userDto.getAddress()) || StringUtils.isEmpty(userDto.getCountry()) || StringUtils.isEmpty(userDto.getState())
+				|| StringUtils.isEmpty(userDto.getDob()) || StringUtils.isEmpty(userDto.getEmail()) || StringUtils.isEmpty(userDto.getPan()) 
+				|| StringUtils.isEmpty(userDto.getPassword())|| StringUtils.isEmpty(userDto.getRole()) || StringUtils.isEmpty(userDto.getSsn()) 
+				|| StringUtils.isEmpty(userDto.getUserName()) ) {
+			UserRestException userRestException = new UserRestException();
+			userRestException.setErrorCode(HttpStatus.BAD_REQUEST);
+			userRestException.setErrorMessage("User inforamtion missing !!");
+			throw userRestException;
+		}
+		return new ResponseEntity<ResponseEvent<String>>(ResponseEvent.response(userService.deleteByUserId(userId, userDto)), HttpStatus.ACCEPTED);
+		
+	}
 }

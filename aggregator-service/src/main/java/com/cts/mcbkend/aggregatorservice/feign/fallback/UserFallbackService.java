@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.cts.mcbkend.aggregatorservice.feign.UserService;
 import com.cts.mcbkend.aggregatorservice.model.UserDto;
 import com.cts.mcbkend.aggregatorservice.rest.event.ResponseEvent;
-import com.cts.mcbkend.aggregatorservice.rest.exception.AggregatorRestException;
+import com.cts.mcbkend.aggregatorservice.rest.exception.ErrorResponse;
 
 @Component("userFallbackService")
 public class UserFallbackService implements UserService{
@@ -17,11 +17,35 @@ public class UserFallbackService implements UserService{
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UserFallbackService.class);
 
 	@Override
-	public ResponseEvent<List<UserDto>> getUserList(String header) throws Exception {
-		LOGGER.info("sessionID: "+header +"Inside UserFallbackService");
-		AggregatorRestException aggregatorRestException = new AggregatorRestException();
-		aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
-		aggregatorRestException.setErrorMessage("User service interrupted");
-		throw aggregatorRestException;
+	public ResponseEvent<List<UserDto>> getUserList(String authorizationHeader) throws Exception {
+		LOGGER.info("sessionID: "+ authorizationHeader + "--Inside UserFallbackService to get user list");
+		ResponseEvent<List<UserDto>> responseEvent = new ResponseEvent<List<UserDto>>();
+		ErrorResponse error = new ErrorResponse();
+		error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+		error.setErrorMessage("Get user list service interrupted, fall back method");
+		responseEvent.setError(error);
+		return responseEvent;
+	}
+
+	@Override
+	public ResponseEvent<UserDto> registerUser(String authorizationHeader, UserDto userDto) throws Exception {
+		LOGGER.info("sessionID: "+ authorizationHeader +"--Inside UserFallbackService to register a user");
+		ResponseEvent<UserDto> responseEvent = new ResponseEvent<UserDto>();
+		ErrorResponse error = new ErrorResponse();
+		error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+		error.setErrorMessage("Register user service interrupted, fall back method");
+		responseEvent.setError(error);
+		return responseEvent;
+	}
+
+	@Override
+	public ResponseEvent<String> deleteUser(String authorizationHeader, Long userId, UserDto userDto) throws Exception {
+		LOGGER.info("sessionID: "+ authorizationHeader +"--Inside UserFallbackService to delete a user");
+		ResponseEvent<String> responseEvent = new ResponseEvent<String>();
+		ErrorResponse error = new ErrorResponse();
+		error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+		error.setErrorMessage("Delete user service interrupted, fall back method");
+		responseEvent.setError(error);
+		return responseEvent;
 	}
 }
