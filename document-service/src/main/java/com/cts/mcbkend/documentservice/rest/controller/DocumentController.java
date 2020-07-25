@@ -56,7 +56,7 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 		if(documentDto==null) {
 			DocumentRestException documentRestException = new DocumentRestException();
 			documentRestException.setErrorCode(HttpStatus.NO_CONTENT);
-			documentRestException.setErrorMessage("No such loan document available for this user!");
+			documentRestException.setErrorMessage("No such document available for this loan number!");
 			throw documentRestException;
 		}
 		return new ResponseEntity<ResponseEvent<DocumentDto>>(ResponseEvent.response(documentDto), HttpStatus.OK);
@@ -145,6 +145,34 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 	@RequestMapping(value={"/v1.2/modify-document/documentIndex/{documentIndex}"},method= RequestMethod.PUT, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<DocumentDto>> updateLoanDocument(@PathVariable("documentIndex") Long documentIndex, @RequestBody DocumentDto documentDto) throws Exception {
 		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> udating the loan by document index {}", documentIndex);
+		if(StringUtils.isEmpty(documentDto.getApprvlStatus()) || StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
+				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
+				|| StringUtils.isEmpty(documentDto.getUserId())) {
+			DocumentRestException documentRestException = new DocumentRestException();
+			documentRestException.setErrorCode(HttpStatus.BAD_REQUEST);
+			documentRestException.setErrorMessage("Document inforamtion missing !!");
+			throw documentRestException;
+		}
+		DocumentDto addedDocumentDto = null;
+		addedDocumentDto = documentService.updateLoanDocument(documentIndex, documentDto);
+		if(addedDocumentDto.getId()==null || addedDocumentDto.getId()<1) {
+			DocumentRestException documentRestException = new DocumentRestException();
+			documentRestException.setErrorCode(HttpStatus.CONFLICT);
+			documentRestException.setErrorMessage("No documents available!");
+			throw documentRestException;
+		}
+		return new ResponseEntity<ResponseEvent<DocumentDto>>(ResponseEvent.response(addedDocumentDto), HttpStatus.ACCEPTED);
+		
+	}
+	
+	/**
+	 * 
+	 * @return ResponseEntity as list of category, all null values in object will be ignored
+	 * @throws Exception
+	 */
+	@RequestMapping(value={"/v1.2/change-document-status/documentIndex/{documentIndex}"},method= RequestMethod.PUT, produces = {"application/json", "application/xml"})
+    public ResponseEntity<ResponseEvent<DocumentDto>> updateLoanDocumentStatus(@PathVariable("documentIndex") Long documentIndex, @RequestBody DocumentDto documentDto) throws Exception {
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Changing status of the document by document index {}", documentIndex);
 		if(StringUtils.isEmpty(documentDto.getApprvlStatus()) || StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
 				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
 				|| StringUtils.isEmpty(documentDto.getUserId())) {
