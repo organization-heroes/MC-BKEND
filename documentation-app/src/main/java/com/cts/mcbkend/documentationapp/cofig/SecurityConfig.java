@@ -48,10 +48,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(config.getUrl()).permitAll()
                    // .antMatchers("/api/auth/loan-service/**").access("hasRole('ADMIN') or hasRole('USER')")
-                    .antMatchers("/api/auth/loan-service/**").hasRole("ADMIN")
+                    .antMatchers("/api/auth/loan-service/**").hasRole("USER")
                     .antMatchers("/api/auth/user-service/**").hasRole("USER")
                     .antMatchers("/api/auth/document-service/**").hasRole("USER")
-                    .antMatchers("/api/auth/aggregator-service/**").hasRole("USER")
+                    .antMatchers("/api/auth/aggregator-service/aggregator/v1.1/**").hasRole("ADMIN")
+                    .antMatchers("/api/auth/aggregator-service/aggregator/v1.2/**").hasRole("USER")
                     .antMatchers("/swagger-ui.html/**").permitAll();
     }
 }

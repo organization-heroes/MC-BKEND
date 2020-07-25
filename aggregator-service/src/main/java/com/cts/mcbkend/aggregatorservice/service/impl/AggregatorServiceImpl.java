@@ -10,8 +10,10 @@ import java.util.stream.Collectors;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.cts.mcbkend.aggregatorservice.feign.AuthCenter;
 import com.cts.mcbkend.aggregatorservice.feign.DocumentService;
 import com.cts.mcbkend.aggregatorservice.feign.LoanService;
 import com.cts.mcbkend.aggregatorservice.feign.UserService;
@@ -24,6 +26,7 @@ import com.cts.mcbkend.aggregatorservice.rest.controller.AggregatorController;
 import com.cts.mcbkend.aggregatorservice.rest.event.ResponseEvent;
 import com.cts.mcbkend.aggregatorservice.rest.exception.AggregatorRestException;
 import com.cts.mcbkend.aggregatorservice.service.AggregatorService;
+import com.cts.mcbkend.aggregatorservice.util.Constants;
 
 @Service("AggregatorService")
 public class AggregatorServiceImpl implements AggregatorService {
@@ -38,6 +41,9 @@ public class AggregatorServiceImpl implements AggregatorService {
 
 	@Autowired
 	private DocumentService documentService;
+	
+	@Autowired
+	private AuthCenter authCenter;
 
 	@Override
 	public List<UserLoanDto> getAllUserLoanList(String authorizationHeader) throws Exception {
@@ -107,6 +113,7 @@ public class AggregatorServiceImpl implements AggregatorService {
 		}
 		return userLoanDtoList;
 	}
+	
 	@Override
 	public UserLoanDto createUserWithLoan(String authorizationHeader, UserLoanDto userLoanDto) throws Exception {
 		ResponseEvent<UserDto> userDtoResponse = null;
@@ -133,11 +140,11 @@ public class AggregatorServiceImpl implements AggregatorService {
 		userDto.setPassword(userLoanDto.getPassword());
 		
 		userDtoResponse = userService.registerUser(authorizationHeader, userDto);
-		checkForFallBack(userDtoResponse);
 		userDto=userDtoResponse.getPayload();
 		
-		if(userDto!=null && userDto.getId()>0) {
+		if(userDto!=null && userDto.getId()!=null && userDto.getId()>0) {
 			//Set users
+			try {
 			userLoanDtoResponse = new UserLoanDto();
 			userLoanDtoResponse.setUserId(userDto.getId());
 			userLoanDtoResponse.setAddress(userDto.getAddress());
@@ -160,9 +167,10 @@ public class AggregatorServiceImpl implements AggregatorService {
 			loanDto.setLoanStatus(userLoanDto.getLoanDocumentList().get(0).getLoanNum());
 			loanDto.setLoanType(userLoanDto.getLoanDocumentList().get(0).getLoanType());
 			loanDto.setUserId(userDto.getId());
+			
 			loanDtoResponse = loanService.createNewLoan(authorizationHeader, loanDto);
 			loanDto = loanDtoResponse.getPayload();
-			if(loanDto!=null && loanDto.getId()>0) {
+			if(loanDto!=null && loanDto.getId()!=null && loanDto.getId()>0) {
 				//Set loans
 				loanDocumentList = new ArrayList<LoanDocumentDto>();
 				LoanDocumentDto loanDocumentDto = new LoanDocumentDto();
@@ -179,19 +187,87 @@ public class AggregatorServiceImpl implements AggregatorService {
 				ResponseEvent<String> deletedUserResponse = userService.deleteUser(authorizationHeader, userDto.getId(), userDto);
 				String response = deletedUserResponse.getPayload();
 				if(response!=null && response.contains("success")) {
-					LOGGER.info(authorizationHeader+"--User deleted success fully from aggregator service, message {}", response);
+					LOGGER.info(authorizationHeader+"--User deleted successfully from aggregator service, message {}", response);
 				} else {
 					LOGGER.error(authorizationHeader+"--User deletion failed with flying colours!!!");
 				}
+				checkForFallBack(loanDtoResponse);
+				createCustomizedException("Loan creation failed", HttpStatus.FAILED_DEPENDENCY);
+			}
+			}catch(Exception e) {
+				ResponseEvent<String> deletedUserResponse = userService.deleteUser(authorizationHeader, userDto.getId(), userDto);
+				String response = deletedUserResponse.getPayload();
+				if(response!=null && response.contains("success")) {
+					LOGGER.info(authorizationHeader+"--User deleted successfully from aggregator service, message {}", response);
+				} else {
+					LOGGER.error(authorizationHeader+"--User deletion failed with flying colours!!!");
+				}
+				checkForFallBack(loanDtoResponse);
 				createCustomizedException("Loan creation failed", HttpStatus.FAILED_DEPENDENCY);
 			}
 		}else {
+			checkForFallBack(userDtoResponse);
 			createCustomizedException("User creation failed", HttpStatus.FAILED_DEPENDENCY);
 		}
 		
 		return userLoanDtoResponse;
 		
 	}
+	
+	@Override
+	public UserLoanDto loginUser(Map<String, String> body) throws Exception {
+		// TODO Auto-generated method stub
+		ResponseEntity<Object> responseEntity= null;
+		UserDto userDtoRequest = null;
+		UserLoanDto userLoanDto = null;
+		ResponseEvent<UserDto> userDtoResponse = null;
+		userDtoRequest = new UserDto();
+		userDtoRequest.setUserName(body.get("username"));
+		userDtoRequest.setPassword(body.get("password"));
+		userDtoResponse = userService.loginUser(userDtoRequest);
+		userDtoRequest=null;
+		checkForFallBack(userDtoResponse);
+		if(userDtoResponse!=null && userDtoResponse.getPayload()!=null) {
+			userDtoRequest=userDtoResponse.getPayload();
+			if(userDtoRequest!=null && userDtoRequest.getId()!=null && userDtoRequest.getId()>0) {
+				userLoanDto = new UserLoanDto();
+				userLoanDto.setUserId(userDtoRequest.getId());
+				userLoanDto.setAddress(userDtoRequest.getAddress());
+				userLoanDto.setContacNo(userDtoRequest.getContacNo());
+				userLoanDto.setCountry(userDtoRequest.getCountry());
+				userLoanDto.setDob(userDtoRequest.getDob());
+				userLoanDto.setEmail(userDtoRequest.getEmail());
+				userLoanDto.setfName(userDtoRequest.getfName());
+				userLoanDto.setlName(userDtoRequest.getlName());
+				userLoanDto.setPan(userDtoRequest.getPan());
+				userLoanDto.setRole(userDtoRequest.getRole());
+				userLoanDto.setSsn(userDtoRequest.getSsn());
+				userLoanDto.setState(userDtoRequest.getState());
+				userLoanDto.setUserName(userDtoRequest.getUserName());
+				if(userDtoRequest.getRole().equalsIgnoreCase(Constants.USER_ROLE_CUSTOMER)) {
+					body.put("username", Constants.CUSTOMER_USERNAME);
+					body.put("password", Constants.CUSTOMER_PASSWORD);
+				} else if(userDtoRequest.getRole().equalsIgnoreCase(Constants.USER_ROLE_DU)) {
+					body.put("username", Constants.DU_USERNAME);
+					body.put("password", Constants.DU_PASSWORD);
+				}
+				responseEntity=authCenter.getUserAuthorization(body);
+				if(responseEntity!=null && !responseEntity.getHeaders().isEmpty() 
+						&& responseEntity.getHeaders().get("Authorization")!=null 
+						&& responseEntity.getHeaders().get("Authorization").toString().length()>0) {
+					LOGGER.info("O-Auth token------------ {}",responseEntity.getHeaders().get("Authorization"));
+					userLoanDto.setAuthToken(responseEntity.getHeaders().get("Authorization").toString());
+				} else {
+					createCustomizedException("Token generation error!! try agin!", HttpStatus.FAILED_DEPENDENCY);
+				}
+			} else {
+				createCustomizedException("Login failed, try agin!", HttpStatus.FAILED_DEPENDENCY);
+			}
+		} else {
+			createCustomizedException("Login failed, try agin!", HttpStatus.FAILED_DEPENDENCY);
+		}
+		return userLoanDto;
+	} 
 	
 	private void checkForFallBack(ResponseEvent<? extends Object> responseEvent) throws Exception{
 		if(responseEvent.getError()!=null) {
@@ -207,8 +283,7 @@ public class AggregatorServiceImpl implements AggregatorService {
 			aggregatorRestException.setErrorCode(statusCode);
 			aggregatorRestException.setErrorMessage(errorMessage);
 			throw aggregatorRestException;
-	} 
-
+	}
 	
 
 }

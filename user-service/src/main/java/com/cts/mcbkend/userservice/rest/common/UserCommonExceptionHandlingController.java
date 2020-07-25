@@ -30,7 +30,7 @@ public class UserCommonExceptionHandlingController {
 		LOGGER.info(" Inside UserBaseController" + ex.getClass());
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		ex.printStackTrace(pw);
+		//ex.printStackTrace(pw);
 		String stackTrace = sw.toString();
 		LOGGER.error("Exception - " + stackTrace);
 		UserRestException userException = (UserRestException) ex;

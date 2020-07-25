@@ -48,4 +48,15 @@ public class UserFallbackService implements UserService{
 		responseEvent.setError(error);
 		return responseEvent;
 	}
+
+	@Override
+	public ResponseEvent<UserDto> loginUser(UserDto userDto) throws Exception {
+		LOGGER.info("Inside UserFallbackService for user login");
+		ResponseEvent<UserDto> responseEvent = new ResponseEvent<UserDto>();
+		ErrorResponse error = new ErrorResponse();
+		error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+		error.setErrorMessage("login user service interrupted, fall back method");
+		responseEvent.setError(error);
+		return responseEvent;
+	}
 }

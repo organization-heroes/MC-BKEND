@@ -1,6 +1,7 @@
 package com.cts.mcbkend.aggregatorservice.rest.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,30 +36,6 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 	private HttpServletRequest request;
 	
 	
-	/**
-	 * 
-	 * @return ResponseEntity as list of category, all null values in object will be ignored
-	 * @throws Exception
-	 */
-	@RequestMapping(value={"/v1.0/get-document/loanNumber/{loanNum}/docId/{docId}", "/v1.1/get-document/loanNumber/{loanNum}/docId/{docId}"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
-    public ResponseEntity<ResponseEvent<DocumentDto>> getDocumentByLoanNumAndDocId(@PathVariable("loanNum") String loanNum, @PathVariable("docId") String docId) throws Exception { 
-		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> Looking for document by loan number {} and docId {}", loanNum, docId);
-		if(StringUtils.isEmpty(loanNum) || StringUtils.isEmpty(docId) ) {
-			AggregatorRestException userRestException = new AggregatorRestException();
-			userRestException.setErrorCode(HttpStatus.BAD_REQUEST);
-			userRestException.setErrorMessage("Document inforamtion missing !!");
-			throw userRestException;
-		}
-		DocumentDto documentDto = null;
-		if(documentDto==null) {
-			AggregatorRestException aggregatorRestException = new AggregatorRestException();
-			aggregatorRestException.setErrorCode(HttpStatus.NO_CONTENT);
-			aggregatorRestException.setErrorMessage("No such loan document available for this user!");
-			throw aggregatorRestException;
-		}
-		return new ResponseEntity<ResponseEvent<DocumentDto>>(ResponseEvent.response(documentDto), HttpStatus.OK);
-		
-	}
 	
 	/**
 	 * 
@@ -103,7 +80,7 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 		}
 		UserLoanDto addedUserLoanDto = null;
 		addedUserLoanDto = aggregatorService.createUserWithLoan(request.getHeader("AUTH_HEADER"), userLoanDto);
-		if(addedUserLoanDto.getUserId()==null || addedUserLoanDto.getUserId()<1) {
+		if(addedUserLoanDto!=null && addedUserLoanDto.getUserId()==null || addedUserLoanDto.getUserId()<1) {
 			AggregatorRestException aggregatorRestException = new AggregatorRestException();
 			aggregatorRestException.setErrorCode(HttpStatus.NOT_FOUND);
 			aggregatorRestException.setErrorMessage("User registration fails!");
@@ -118,45 +95,25 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 	 * @return ResponseEntity as list of category, all null values in object will be ignored
 	 * @throws Exception
 	 */
-	@RequestMapping(value={"/v1.2/modify-document/documentIndex/{documentIndex}"},method= RequestMethod.PUT, produces = {"application/json", "application/xml"})
-    public ResponseEntity<ResponseEvent<DocumentDto>> updateLoanDocument(@PathVariable("documentIndex") Long documentIndex, @RequestBody DocumentDto documentDto) throws Exception {
-		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> udating the loan by document index {}", documentIndex);
-		if(StringUtils.isEmpty(documentDto.getApprvlStatus()) || StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
-				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
-				|| StringUtils.isEmpty(documentDto.getUserId())) {
+	@RequestMapping(value={"/v1.2/login-user"},method= RequestMethod.POST, produces = {"application/json", "application/xml"})
+    public ResponseEntity<ResponseEvent<UserLoanDto>> loginUser(@RequestBody Map<String,String> body) throws Exception {
+		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> Login user ");
+		if(body==null || body.isEmpty() || StringUtils.isEmpty(body.get("username")) || StringUtils.isEmpty(body.get("password")) ) {
 			AggregatorRestException aggregatorRestException = new AggregatorRestException();
 			aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
-			aggregatorRestException.setErrorMessage("Document inforamtion missing !!");
+			aggregatorRestException.setErrorMessage("User login information is missing !!");
 			throw aggregatorRestException;
 		}
-		DocumentDto addedDocumentDto = null;
-		if(addedDocumentDto.getId()==null || addedDocumentDto.getId()<1) {
+		UserLoanDto loggedUserLoanDto = null;
+		loggedUserLoanDto = aggregatorService.loginUser(body);
+		if(loggedUserLoanDto!=null && loggedUserLoanDto.getUserId()==null || loggedUserLoanDto.getUserId()<1) {
 			AggregatorRestException aggregatorRestException = new AggregatorRestException();
-			aggregatorRestException.setErrorCode(HttpStatus.CONFLICT);
-			aggregatorRestException.setErrorMessage("No documents available!");
+			aggregatorRestException.setErrorCode(HttpStatus.NOT_FOUND);
+			aggregatorRestException.setErrorMessage("User login fails!");
 			throw aggregatorRestException;
 		}
-		return new ResponseEntity<ResponseEvent<DocumentDto>>(ResponseEvent.response(addedDocumentDto), HttpStatus.ACCEPTED);
+		return new ResponseEntity<ResponseEvent<UserLoanDto>>(ResponseEvent.response(loggedUserLoanDto), HttpStatus.CREATED);
 		
 	}
 	
-	/**
-	 * 
-	 * @return ResponseEntity as list of category, all null values in object will be ignored
-	 * @throws Exception
-	 */
-	@RequestMapping(value={"/v1.2/delete-document/documentIndex/{documentIndex}"},method= RequestMethod.DELETE, produces = {"application/json", "application/xml"})
-    public ResponseEntity<ResponseEvent<String>> deleteLoanDocument(@PathVariable("documentIndex") Long documentIndex, @RequestBody DocumentDto documentDto) throws Exception {
-		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> deleting of document by document index {}", documentIndex);
-		if(StringUtils.isEmpty(documentDto.getApprvlStatus()) || StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 
-				|| StringUtils.isEmpty(documentDto.getDocLocation()) || StringUtils.isEmpty(documentDto.getDocTitle()) || StringUtils.isEmpty(documentDto.getLoanNum())
-				|| StringUtils.isEmpty(documentDto.getUserId())) {
-			AggregatorRestException aggregatorRestException = new AggregatorRestException();
-			aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
-			aggregatorRestException.setErrorMessage("Document inforamtion missing !!");
-			throw aggregatorRestException;
-		}
-		return new ResponseEntity<ResponseEvent<String>>(ResponseEvent.response(null), HttpStatus.ACCEPTED);
-		
-	}
 }

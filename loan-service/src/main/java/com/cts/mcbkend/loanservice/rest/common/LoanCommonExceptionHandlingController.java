@@ -29,10 +29,10 @@ public class LoanCommonExceptionHandlingController {
 	@ExceptionHandler(LoanRestException.class)
 	public ResponseEntity<ResponseEvent> exceptionHandler(Exception ex) {
 		// ex.printStackTrace();
-		LOGGER.info(" Inside UserBaseController" + ex.getClass());
+		LOGGER.info(" Inside LoanBaseController" + ex.getClass());
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		ex.printStackTrace(pw);
+		//ex.printStackTrace(pw);
 		String stackTrace = sw.toString();
 		LOGGER.error("Exception - " + stackTrace);
 		LoanRestException documentException = (LoanRestException) ex;

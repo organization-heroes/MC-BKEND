@@ -23,7 +23,7 @@ public class AggregatorExceptionAdvice {
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AggregatorExceptionAdvice.class);
 	@ExceptionHandler(Throwable.class)
 	public ResponseEntity<ResponseEvent<ErrorResponse>> exceptionHandler(Exception ex) {
-		LOGGER.info("UserExceptionAdvice:: For Exception");
+		LOGGER.info("AggregatorExceptionAdvice:: For Exception");
 		ex.printStackTrace();
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());

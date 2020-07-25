@@ -3,6 +3,9 @@ server:
 
 sukanta.security.jwt.secret: topsecret
 
+spring:
+  application.name: auth-center
+
 eureka:
   client:
     serviceUrl:

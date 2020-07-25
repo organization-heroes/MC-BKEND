@@ -33,6 +33,7 @@ public class UserDto implements Serializable {
 	private String dob;
 	
 	private String ssn;
+	
 
 	public Long getId() {
 		return id;

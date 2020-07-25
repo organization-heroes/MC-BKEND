@@ -23,7 +23,7 @@ public class UserExceptionAdvice {
 	@ExceptionHandler(Throwable.class)
 	public ResponseEntity<ResponseEvent> exceptionHandler(Exception ex) {
 		LOGGER.info("UserExceptionAdvice:: For Exception");
-		ex.printStackTrace();
+		//ex.printStackTrace();
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		error.setErrorMessage("Oops! Something went wrong. Please, contact your administrator.");

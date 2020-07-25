@@ -16,3 +16,8 @@ eureka:
 
 server:
   port: 8087
+  
+turbine:
+  aggregator:
+    clusterConfig: AGGREGATOR-SERVICE
+  appConfig: aggregator-service

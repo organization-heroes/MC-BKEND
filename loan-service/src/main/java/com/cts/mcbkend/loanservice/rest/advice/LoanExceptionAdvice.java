@@ -23,8 +23,8 @@ public class LoanExceptionAdvice {
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LoanExceptionAdvice.class);
 	@ExceptionHandler(Throwable.class)
 	public ResponseEntity<ResponseEvent<ErrorResponse>> exceptionHandler(Exception ex) {
-		LOGGER.info("UserExceptionAdvice:: For Exception");
-		ex.printStackTrace();
+		LOGGER.info("LoanExceptionAdvice:: For Exception");
+		//ex.printStackTrace();
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		error.setErrorMessage("Oops! Something went wrong. Please, contact your administrator.");

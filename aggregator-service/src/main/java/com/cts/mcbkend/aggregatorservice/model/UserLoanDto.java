@@ -35,6 +35,8 @@ public class UserLoanDto implements Serializable{
 	
 	private String ssn;
 	
+	private String authToken;
+	
 	private List<LoanDocumentDto> loanDocumentList;
 
 	public Long getUserId() {
@@ -147,6 +149,14 @@ public class UserLoanDto implements Serializable{
 
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
+	}
+
+	public String getAuthToken() {
+		return authToken;
+	}
+
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
 	}
 
 	public List<LoanDocumentDto> getLoanDocumentList() {

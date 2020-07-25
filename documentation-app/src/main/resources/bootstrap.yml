@@ -50,7 +50,6 @@ zuul:
 hystrix:
   metrics:
     enabled: true
-  enabled: true
   threadpool:
     default:
       coreSize: 100  # Hystrix Thread Pool default size
@@ -60,22 +59,26 @@ hystrix:
   command:
     default:
       execution:
+        timeout:
+          enabled: true
         isolation:
           thread:
-            timeoutInMilliseconds: 3000     
+            timeoutInMilliseconds: 6000     
       circuitBreaker:
-        requestVolumeThreshold: 2           
+        requestVolumeThreshold: 4           
         errorThresholdPercentage: 50       
         enabled: true
+        sleepWindowInMilliseconds: 10000
 
 management:
   endpoints:
     hystrix.stream.enabled: true
-    web.exposure.include: hystrix.stream
 
 feign:
   hsytrix:
     enabled: true
+    
+ribbon.ReadTimeout: 60000
     
 eureka:
   instance:
@@ -84,7 +87,7 @@ eureka:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
   client:
     enabled: true
-    registerWithEureka: true
+    registerWithEureka: false
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8760/eureka/
