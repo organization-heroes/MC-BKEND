@@ -64,19 +64,26 @@ public class AggregatorController extends AggregatorCommonExceptionHandlingContr
 	@RequestMapping(value={"/v1.2/register-user"},method= RequestMethod.POST, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<UserLoanDto>> createUserWithLoan(@RequestBody UserLoanDto userLoanDto) throws Exception {
 		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +"=====> Adding user ");
-		if(StringUtils.isEmpty(userLoanDto.getfName()) || StringUtils.isEmpty(userLoanDto.getlName()) || StringUtils.isEmpty(userLoanDto.getContacNo()) 
+		if(userLoanDto==null || StringUtils.isEmpty(userLoanDto.getfName()) || StringUtils.isEmpty(userLoanDto.getlName()) || StringUtils.isEmpty(userLoanDto.getContacNo()) 
 				|| StringUtils.isEmpty(userLoanDto.getAddress()) || StringUtils.isEmpty(userLoanDto.getCountry()) || StringUtils.isEmpty(userLoanDto.getState())
 				|| StringUtils.isEmpty(userLoanDto.getDob()) || StringUtils.isEmpty(userLoanDto.getEmail()) || StringUtils.isEmpty(userLoanDto.getPan()) 
 				|| StringUtils.isEmpty(userLoanDto.getPassword())|| StringUtils.isEmpty(userLoanDto.getRole()) || StringUtils.isEmpty(userLoanDto.getSsn()) 
-				|| StringUtils.isEmpty(userLoanDto.getUserName())|| userLoanDto.getLoanDocumentList()==null || userLoanDto.getLoanDocumentList().isEmpty()
-				||userLoanDto.getLoanDocumentList().size()<1||StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanDesc()) 
-				|| StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanNum()) 
-				|| StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanStatus()) 
-				|| StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanType())) {
+				|| StringUtils.isEmpty(userLoanDto.getUserName())) {
 			AggregatorRestException aggregatorRestException = new AggregatorRestException();
 			aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
-			aggregatorRestException.setErrorMessage("User inforamtion or Loan infromation is missing !!");
+			aggregatorRestException.setErrorMessage("User inforamtioninfromation is missing !!");
 			throw aggregatorRestException;
+		}
+		if(userLoanDto.getRole().equalsIgnoreCase("Customer")) {
+			if(userLoanDto.getLoanDocumentList()==null || userLoanDto.getLoanDocumentList().isEmpty() ||userLoanDto.getLoanDocumentList().size()<1||StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanDesc()) 
+					|| StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanNum()) 
+					|| StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanStatus()) 
+					|| StringUtils.isEmpty(userLoanDto.getLoanDocumentList().get(0).getLoanType())) {
+				AggregatorRestException aggregatorRestException = new AggregatorRestException();
+				aggregatorRestException.setErrorCode(HttpStatus.BAD_REQUEST);
+				aggregatorRestException.setErrorMessage("User inforamtion or Loan infromation is missing !!");
+				throw aggregatorRestException;
+			}
 		}
 		UserLoanDto addedUserLoanDto = null;
 		addedUserLoanDto = aggregatorService.createUserWithLoan(request.getHeader("AUTH_HEADER"), userLoanDto);

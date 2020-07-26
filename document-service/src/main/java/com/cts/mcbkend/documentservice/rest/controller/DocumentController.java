@@ -42,7 +42,7 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 	 * @return ResponseEntity as list of category, all null values in object will be ignored
 	 * @throws Exception
 	 */
-	@RequestMapping(value={"/v1.0/get-document/loanNumber/{loanNum}/docId/{docId}", "/v1.1/get-document/loanNumber/{loanNum}/docId/{docId}"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
+	@RequestMapping(value={"/v1.1/get-document/loanNumber/{loanNum}/docId/{docId}", "/v1.2/get-document/loanNumber/{loanNum}/docId/{docId}"},method= RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<DocumentDto>> getDocumentByLoanNumAndDocId(@PathVariable("loanNum") String loanNum, @PathVariable("docId") String docId) throws Exception { 
 		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Looking for document by loan number {} and docId {}", loanNum, docId);
 		if(StringUtils.isEmpty(loanNum) || StringUtils.isEmpty(docId) ) {
@@ -72,7 +72,7 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
     public ResponseEntity<ResponseEvent<List<DocumentDto>>> findAllAvailableDocuments() throws Exception {
 		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Get all available documents");
 		List<DocumentDto> documentDtoList = null;
-		documentDtoList=documentService.findByApprvlStatusIsAvalilable();
+		documentDtoList=documentService.findAlldocuments();
 		if(documentDtoList==null || documentDtoList.isEmpty() || documentDtoList.size()<1) {
 			DocumentRestException documentRestException = new DocumentRestException();
 			documentRestException.setErrorCode(HttpStatus.BAD_REQUEST);

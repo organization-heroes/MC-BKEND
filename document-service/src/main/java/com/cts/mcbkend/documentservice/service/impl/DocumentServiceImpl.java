@@ -137,7 +137,7 @@ public class DocumentServiceImpl implements DocumentService {
 		DocumentEntity documentEntityObj = null;
 		documentEntityObj = documentRepository.findById(documentIndex);
 			if(documentEntityObj!=null) {
-				documentEntityObj.setApprvlStatus(Constants.INITIATE_APPROVAL_STATUS);
+				documentEntityObj.setApprvlStatus(documentDto.getApprvlStatus());
 				documentEntityObj.setDocDesc(documentDto.getDocDesc());
 				documentEntityObj.setDocId(documentDto.getDocId());//Need to be changed by dynamically generated
 				documentEntityObj.setDocLocation(documentDto.getDocLocation());
@@ -154,6 +154,7 @@ public class DocumentServiceImpl implements DocumentService {
 		DocumentDto registerDocumentDto = null;
 		DocumentEntity registerDocumentEntity = null;
 		DocumentEntity documentEntity = convertToEntity(documentDto);
+		documentEntity.setApprvlStatus(Constants.INITIATE_APPROVAL_STATUS);
 		registerDocumentEntity = documentRepository.saveAndFlush(documentEntity);
 		
 		if(registerDocumentEntity!=null) {

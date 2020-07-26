@@ -62,7 +62,8 @@ public class AggregatorServiceImpl implements AggregatorService {
 		listUserDtoResponse = userService.getUserList(authorizationHeader);
 		checkForFallBack(listUserDtoResponse);
 		userDtoList = listUserDtoResponse.getPayload();
-		userDtoList.stream().forEach((userDto) -> userIds.add(userDto.getId()));
+		if(userDtoList!=null) {
+		userDtoList.stream().forEach((userDto) -> { if(userDto.getRole()!=null && userDto.getRole().equalsIgnoreCase(Constants.USER_ROLE_CUSTOMER)) {userIds.add(userDto.getId());}});
 		
 		listLoanDtoResponse = loanService.getMultipleLoans(authorizationHeader, new ArrayList<Long>(userIds));
 		checkForFallBack(listLoanDtoResponse);
@@ -74,8 +75,9 @@ public class AggregatorServiceImpl implements AggregatorService {
 		documentDtoList = listDocumentDtoResponse.getPayload();
 		Map<String, List<DocumentDto>> loanDocumentMap = documentDtoList.stream().collect(Collectors.groupingBy(w -> w.getLoanNum()));
 		
-		if(userDtoList!=null) {
+		
 			for(UserDto eachUserDto: userDtoList) {
+				if(eachUserDto.getRole()!=null && eachUserDto.getRole().equalsIgnoreCase(Constants.USER_ROLE_CUSTOMER)) {
 				userLoanDto = new UserLoanDto();
 				userLoanDto.setUserId(eachUserDto.getId());
 				userLoanDto.setAddress(eachUserDto.getAddress());
@@ -111,6 +113,7 @@ public class AggregatorServiceImpl implements AggregatorService {
 			
 			}
 		}
+		}
 		return userLoanDtoList;
 	}
 	
@@ -142,7 +145,9 @@ public class AggregatorServiceImpl implements AggregatorService {
 		userDtoResponse = userService.registerUser(authorizationHeader, userDto);
 		userDto=userDtoResponse.getPayload();
 		
+		
 		if(userDto!=null && userDto.getId()!=null && userDto.getId()>0) {
+			LOGGER.info("user registered {}", userDto);
 			//Set users
 			try {
 			userLoanDtoResponse = new UserLoanDto();
@@ -160,6 +165,7 @@ public class AggregatorServiceImpl implements AggregatorService {
 			userLoanDtoResponse.setState(userDto.getState());
 			userLoanDtoResponse.setUserName(userDto.getUserName());
 			
+			if(userDto.getRole()!=null && userDto.getRole().equalsIgnoreCase(Constants.USER_ROLE_CUSTOMER)) {
 			//Loan Creation
 			loanDto = new LoanDto();
 			loanDto.setLoanDesc(userLoanDto.getLoanDocumentList().get(0).getLoanDesc());
@@ -171,6 +177,7 @@ public class AggregatorServiceImpl implements AggregatorService {
 			loanDtoResponse = loanService.createNewLoan(authorizationHeader, loanDto);
 			loanDto = loanDtoResponse.getPayload();
 			if(loanDto!=null && loanDto.getId()!=null && loanDto.getId()>0) {
+				LOGGER.info("loan created {}", loanDto);
 				//Set loans
 				loanDocumentList = new ArrayList<LoanDocumentDto>();
 				LoanDocumentDto loanDocumentDto = new LoanDocumentDto();
@@ -194,6 +201,7 @@ public class AggregatorServiceImpl implements AggregatorService {
 				checkForFallBack(loanDtoResponse);
 				createCustomizedException("Loan creation failed", HttpStatus.FAILED_DEPENDENCY);
 			}
+			}
 			}catch(Exception e) {
 				ResponseEvent<String> deletedUserResponse = userService.deleteUser(authorizationHeader, userDto.getId(), userDto);
 				String response = deletedUserResponse.getPayload();
@@ -206,6 +214,13 @@ public class AggregatorServiceImpl implements AggregatorService {
 				createCustomizedException("Loan creation failed", HttpStatus.FAILED_DEPENDENCY);
 			}
 		}else {
+			ResponseEvent<String> deletedUserResponse = userService.deleteUser(authorizationHeader, userDto.getId(), userDto);
+			String response = deletedUserResponse.getPayload();
+			if(response!=null && response.contains("success")) {
+				LOGGER.info(authorizationHeader+"--User deleted successfully from aggregator service, message {}", response);
+			} else {
+				LOGGER.error(authorizationHeader+"--User deletion failed with flying colours!!!");
+			}
 			checkForFallBack(userDtoResponse);
 			createCustomizedException("User creation failed", HttpStatus.FAILED_DEPENDENCY);
 		}
