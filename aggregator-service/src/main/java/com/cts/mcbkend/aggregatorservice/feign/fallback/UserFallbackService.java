@@ -18,7 +18,7 @@ public class UserFallbackService implements UserService{
 
 	@Override
 	public ResponseEvent<List<UserDto>> getUserList(String authorizationHeader) throws Exception {
-		LOGGER.info("sessionID: "+ authorizationHeader + "--Inside UserFallbackService to get user list");
+		LOGGER.info("sessionID: {} --Inside UserFallbackService to get user list", authorizationHeader);
 		ResponseEvent<List<UserDto>> responseEvent = new ResponseEvent<List<UserDto>>();
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.BAD_REQUEST.value());
@@ -29,7 +29,7 @@ public class UserFallbackService implements UserService{
 
 	@Override
 	public ResponseEvent<UserDto> registerUser(String authorizationHeader, UserDto userDto) throws Exception {
-		LOGGER.info("sessionID: "+ authorizationHeader +"--Inside UserFallbackService to register a user");
+		LOGGER.info("sessionID: {} --Inside UserFallbackService to register a user", authorizationHeader);
 		ResponseEvent<UserDto> responseEvent = new ResponseEvent<UserDto>();
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.BAD_REQUEST.value());
@@ -40,7 +40,7 @@ public class UserFallbackService implements UserService{
 
 	@Override
 	public ResponseEvent<String> deleteUser(String authorizationHeader, Long userId, UserDto userDto) throws Exception {
-		LOGGER.info("sessionID: "+ authorizationHeader +"--Inside UserFallbackService to delete a user");
+		LOGGER.info("sessionID: {} --Inside UserFallbackService to delete a user", authorizationHeader);
 		ResponseEvent<String> responseEvent = new ResponseEvent<String>();
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.BAD_REQUEST.value());

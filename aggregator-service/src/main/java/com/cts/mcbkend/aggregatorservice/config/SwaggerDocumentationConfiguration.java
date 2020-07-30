@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.cts.mcbkend.aggregatorservice.util.Constants;
+
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -29,7 +31,7 @@ public class SwaggerDocumentationConfiguration {
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
 				.enable(swaggerEnabled).select()
-				.apis(RequestHandlerSelectors.basePackage("com.cts.mcbkend.aggregatorservice"))
+				.apis(RequestHandlerSelectors.basePackage(Constants.aggreServ))
 				.paths(PathSelectors.any()).build().pathMapping("/");
 	}
 	@Bean
@@ -37,30 +39,30 @@ public class SwaggerDocumentationConfiguration {
 	    return new Docket(DocumentationType.SWAGGER_2)
 	        .groupName("aggregator-api-1.0")
 	        .select()
-	            .apis(RequestHandlerSelectors.basePackage("com.cts.mcbkend.aggregatorservice"))
+	            .apis(RequestHandlerSelectors.basePackage(Constants.aggreServ))
 	            .paths(regex("/aggregator/v1.0.*"))
 	        .build()
-	        .apiInfo(new ApiInfoBuilder().version("1.0").title("Document API").description("Documentation Document API v1.0").build());
+	        .apiInfo(new ApiInfoBuilder().version("1.0").title(Constants.documentApi).description("Documentation Document API v1.0").build());
 	}
 	@Bean
 	public Docket swaggerDocumentApi11() {
 	    return new Docket(DocumentationType.SWAGGER_2)
 	        .groupName("aggregator-api-1.1")
 	        .select()
-	            .apis(RequestHandlerSelectors.basePackage("com.cts.mcbkend.aggregatorservice"))
+	            .apis(RequestHandlerSelectors.basePackage(Constants.aggreServ))
 	            .paths(regex("/aggregator/v1.1.*"))
 	        .build()
-	        .apiInfo(new ApiInfoBuilder().version("1.1").title("Document API").description("Documentation Document API v1.1").build());
+	        .apiInfo(new ApiInfoBuilder().version("1.1").title(Constants.documentApi).description("Documentation Document API v1.1").build());
 	}
 	@Bean
 	public Docket swaggerDocumentApi12() {
 	    return new Docket(DocumentationType.SWAGGER_2)
 	        .groupName("aggregator-api-1.2")
 	        .select()
-	            .apis(RequestHandlerSelectors.basePackage("com.cts.mcbkend.aggregatorservice"))
+	            .apis(RequestHandlerSelectors.basePackage(Constants.aggreServ))
 	            .paths(regex("/aggregator/v1.2.*"))
 	        .build()
-	        .apiInfo(new ApiInfoBuilder().version("1.2").title("Document API").description("Documentation Document API v1.2").build());
+	        .apiInfo(new ApiInfoBuilder().version("1.2").title(Constants.documentApi).description("Documentation Document API v1.2").build());
 	}
 	
 

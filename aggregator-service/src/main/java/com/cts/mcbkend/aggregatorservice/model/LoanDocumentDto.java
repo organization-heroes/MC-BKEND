@@ -22,6 +22,8 @@ public class LoanDocumentDto implements Serializable{
 	private Long lockId;
 	
 	private List<DocumentDto> documentList;
+	
+	public LoanDocumentDto () {};
 
 	public Long getLoanId() {
 		return loanId;

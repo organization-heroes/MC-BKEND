@@ -19,7 +19,7 @@ public class DocumentFallbackService implements DocumentService{
 
 	@Override
 	public ResponseEvent<List<DocumentDto>> getMultipleDocuments(String authorizationHeader, @RequestParam List<Long> userIds) throws Exception {
-		LOGGER.info("sessionID: "+authorizationHeader +"--Inside DocumentFallbackService");
+		LOGGER.info("sessionID: {} --Inside DocumentFallbackService",authorizationHeader);
 		ResponseEvent<List<DocumentDto>> responseEvent = new ResponseEvent<List<DocumentDto>>();
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.BAD_REQUEST.value());

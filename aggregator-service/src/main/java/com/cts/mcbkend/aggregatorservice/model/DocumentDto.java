@@ -21,6 +21,8 @@ public class DocumentDto implements Serializable{
 	private String apprvlStatus;
 	
 	private Long userId;
+	
+	public DocumentDto () {};
 
 	public Long getId() {
 		return id;

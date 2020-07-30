@@ -27,6 +27,7 @@
 	</properties>
 
 	<modules>
+		<module>common</module>
 		<module>discovery-server</module>
 		<module>cofig-server</module>
 		<module>h2db-initializer</module>
@@ -35,7 +36,6 @@
 		<module>loan-service</module>
 		<module>aggregator-service</module>
 		<module>auth-center</module>
-		<module>common</module>
 		<module>documentation-app</module>
 	</modules>
 	

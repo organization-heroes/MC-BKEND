@@ -22,6 +22,8 @@ public class LoanDto implements Serializable{
 	
 	private Long userId;
 	
+	public LoanDto() {};
+	
 	public int hashCode(){
        return id.intValue();
     }

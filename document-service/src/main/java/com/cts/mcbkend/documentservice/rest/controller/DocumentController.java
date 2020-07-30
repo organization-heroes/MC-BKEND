@@ -170,7 +170,7 @@ public class DocumentController extends DocumentCommonExceptionHandlingControlle
 	 * @return ResponseEntity as list of category, all null values in object will be ignored
 	 * @throws Exception
 	 */
-	@RequestMapping(value={"/v1.2/change-document-status/documentIndex/{documentIndex}"},method= RequestMethod.PUT, produces = {"application/json", "application/xml"})
+	@RequestMapping(value={"/v1.1/change-document-status/documentIndex/{documentIndex}"},method= RequestMethod.PUT, produces = {"application/json", "application/xml"})
     public ResponseEntity<ResponseEvent<DocumentDto>> updateLoanDocumentStatus(@PathVariable("documentIndex") Long documentIndex, @RequestBody DocumentDto documentDto) throws Exception {
 		LOGGER.info("sessionID: "+request.getHeader("AUTH_HEADER") +" --InstanceID: " + customInstanceId + "=====> Changing status of the document by document index {}", documentIndex);
 		if(StringUtils.isEmpty(documentDto.getApprvlStatus()) || StringUtils.isEmpty(documentDto.getDocDesc()) || StringUtils.isEmpty(documentDto.getDocId()) 

@@ -2,6 +2,9 @@ package com.cts.mcbkend.aggregatorservice.rest.advice;
 
 
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +26,12 @@ public class AggregatorExceptionAdvice {
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AggregatorExceptionAdvice.class);
 	@ExceptionHandler(Throwable.class)
 	public ResponseEntity<ResponseEvent<ErrorResponse>> exceptionHandler(Exception ex) {
-		LOGGER.info("AggregatorExceptionAdvice:: For Exception");
-		ex.printStackTrace();
+		LOGGER.info("AggregatorExceptionAdvice:: For Exception {}", ex.getClass());
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		ex.printStackTrace(pw);
+		String stackTrace = sw.toString();
+		LOGGER.error("Exception - {}", stackTrace);
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		error.setErrorMessage("Oops! Something went wrong. Please, contact your administrator.");

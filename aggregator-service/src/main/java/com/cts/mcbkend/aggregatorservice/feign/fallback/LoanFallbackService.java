@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,7 +19,7 @@ public class LoanFallbackService implements LoanService{
 
 	@Override
 	public ResponseEvent<List<LoanDto>> getMultipleLoans(String authorizationHeader, @RequestParam List<Long> userIds) throws Exception {
-		LOGGER.info("sessionID: "+authorizationHeader +"--Inside LoanFallbackService to get multiple loans");
+		LOGGER.info("sessionID: {} --Inside LoanFallbackService to get multiple loans",authorizationHeader);
 		ResponseEvent<List<LoanDto>> responseEvent = new ResponseEvent<List<LoanDto>>();
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.BAD_REQUEST.value());
@@ -31,7 +30,7 @@ public class LoanFallbackService implements LoanService{
 
 	@Override
 	public ResponseEvent<LoanDto> createNewLoan(String authorizationHeader, LoanDto loanDto) throws Exception {
-		LOGGER.info("sessionID: "+authorizationHeader +"--Inside LoanFallbackService to create new loan");
+		LOGGER.info("sessionID: {} --Inside LoanFallbackService to create new loan",authorizationHeader);
 		ResponseEvent<LoanDto> responseEvent = new ResponseEvent<LoanDto>();
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.BAD_REQUEST.value());

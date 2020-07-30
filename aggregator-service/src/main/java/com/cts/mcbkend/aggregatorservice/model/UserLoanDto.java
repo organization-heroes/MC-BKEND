@@ -38,6 +38,30 @@ public class UserLoanDto implements Serializable{
 	private String authToken;
 	
 	private List<LoanDocumentDto> loanDocumentList;
+	
+	public UserLoanDto() {};
+
+	public UserLoanDto(Long userId, String fName, String lName, String userName, String password, String role,
+			String address, String state, String country, String email, String pan, String contacNo, String dob,
+			String ssn, String authToken, List<LoanDocumentDto> loanDocumentList) {
+		super();
+		this.userId = userId;
+		this.fName = fName;
+		this.lName = lName;
+		this.userName = userName;
+		this.password = password;
+		this.role = role;
+		this.address = address;
+		this.state = state;
+		this.country = country;
+		this.email = email;
+		this.pan = pan;
+		this.contacNo = contacNo;
+		this.dob = dob;
+		this.ssn = ssn;
+		this.authToken = authToken;
+		this.loanDocumentList = loanDocumentList;
+	}
 
 	public Long getUserId() {
 		return userId;

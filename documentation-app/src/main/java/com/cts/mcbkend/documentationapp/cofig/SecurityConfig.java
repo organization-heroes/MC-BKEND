@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/api/auth/user-service/**").hasRole("USER")
                     .antMatchers("/api/auth/document-service/**").hasRole("USER")
                     .antMatchers("/api/auth/aggregator-service/aggregator/v1.1/**").hasRole("ADMIN")
+                    .antMatchers("/api/auth/document-service/document/v1.1/**").hasRole("ADMIN")
                     .antMatchers("/api/auth/aggregator-service/aggregator/v1.2/**").hasRole("USER")
                     .antMatchers("/swagger-ui.html/**").permitAll();
     }

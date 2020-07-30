@@ -50,7 +50,7 @@ hystrix:
         requestVolumeThreshold: 4           # If more than two request fails in 10 secs circuit will open
         errorThresholdPercentage: 50       # requestVolumn, exceeds circuit open
         enabled: true
-        sleepWindowInMilliseconds: 5000    #10 seconds sleeping window
+        sleepWindowInMilliseconds: 5000    #5 seconds sleeping window
       
 management:
   endpoints:

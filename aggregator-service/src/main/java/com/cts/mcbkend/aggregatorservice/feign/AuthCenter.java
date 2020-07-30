@@ -6,9 +6,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.springframework.web.bind.annotation.PostMapping;
 import com.cts.mcbkend.aggregatorservice.feign.fallback.AuthFallbackService;
 
 @RefreshScope
@@ -16,7 +14,7 @@ import com.cts.mcbkend.aggregatorservice.feign.fallback.AuthFallbackService;
 @RibbonClient(name="auth-center")
 public interface AuthCenter {
 	
-	@RequestMapping(value={"/login"}, method= RequestMethod.POST)
+	@PostMapping(path = "/login")
 	public ResponseEntity<Object> getUserAuthorization(Map<String, String> requestBody) throws Exception;
 	
 

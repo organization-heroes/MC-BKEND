@@ -1,0 +1,11 @@
+eureka.client.enabled: false
+auth-center.name: auth-center
+auth-center.url: 127.0.0.1:8081
+customer.username: customer
+customer.password: customer
+underwriter.username: loan
+underwriter.password: officer
+swager.enabled: false
+#Disable cloud config and config discovery
+spring.cloud.config.discovery.enabled: false
+spring.cloud.config.enabled: false

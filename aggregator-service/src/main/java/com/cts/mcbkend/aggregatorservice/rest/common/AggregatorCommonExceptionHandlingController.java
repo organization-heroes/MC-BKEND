@@ -28,12 +28,12 @@ public class AggregatorCommonExceptionHandlingController {
 	@ExceptionHandler(AggregatorRestException.class)
 	public ResponseEntity<ResponseEvent> exceptionHandler(Exception ex) {
 		// ex.printStackTrace();
-		LOGGER.info(" Inside AggregatorBaseController" + ex.getClass());
+		LOGGER.info(" Inside AggregatorBaseController {}", ex.getClass());
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		//ex.printStackTrace(pw);
+		ex.printStackTrace(pw);
 		String stackTrace = sw.toString();
-		LOGGER.error("Exception - " + stackTrace);
+		LOGGER.error("Exception - {}", stackTrace);
 		AggregatorRestException documentException = (AggregatorRestException) ex;
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(documentException.getErrorCode().value());
