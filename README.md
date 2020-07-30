@@ -58,7 +58,7 @@ From API Gateway(Zuul Proxy), Hystrix, Feign, O-Auth, H2-DB as a service, Swagge
 
 Reach out to me at one of the following places!
 
-- Email at <a href="sukanta.workspace@gmail.com" target="_blank">`Gmail</a>
+- Email at <a href="sukanta.workspace@gmail.com" target="_blank">`Gmail`</a>
 - LindIn at <a href="https://www.linkedin.com/in/sukanta-banerjee-6ab375100?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BrVVEwMzaRlGWsp3vJ7utzQ%3D%3D" target="_blank">`@linkedIn`</a>
 
 ---
