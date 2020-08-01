@@ -38,7 +38,7 @@ mvn sonar:sonar -Dsonar.projectKey=mc-bkend -Dsonar.host.url=http://localhost:90
 
 ### Step 6
 
-- **Go to `localhost:88800/swagger-ui.html` and HACK AWAY!** 🔨🔨🔨
+- **Go to `localhost:8800/swagger-ui.html` and HACK AWAY!** 🔨🔨🔨
 
 ### Step 7
 
